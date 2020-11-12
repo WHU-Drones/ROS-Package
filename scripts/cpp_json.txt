@@ -14,7 +14,7 @@
 	// 	"description": "Log output to console"
 	// }
 
-	"Print to console": {
+	"ROS node class": {
 		"prefix": "node",
 		"body": [
 			"#pragma once",
@@ -107,5 +107,35 @@
 			"$0"
 		],
 		"description": "Create ros node class"
-	}
+	},
+
+	"ROS publisher": {
+		"prefix": "pub",
+		"body": [
+			"_$1_publisher = _nh.advertise<$2>(_$1_topic, ${3:5}, true);",
+			"$0"
+		],
+		"description": "Create a ros publisher"
+	},
+
+	"ROS subscriber": {
+		"prefix": "sub",
+		"body": [
+			"_$1_subscriber = _nh.subscribe<$2>(_$1_topic, ${3:5}, &$TM_FILENAME_BASE::$4_Callback, this);",
+			"$0"
+		],
+		"description": "Create a ros subscriber"
+	},
+
+	"ROS subscriber callback": {
+		"prefix": "subcall",
+		"body": [
+			"void $TM_FILENAME_BASE::$1_Callback(const $2ConstPtr& msg)",
+			"{",
+			"    ",
+			"}",
+			"$0"
+		],
+		"description": "Create a ros subscriber callback"
+	},
 }
