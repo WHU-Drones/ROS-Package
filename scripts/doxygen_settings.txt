@@ -1,3 +1,9 @@
+# 内容为模板，所以将
+# "doxdocgen.file.versionTag": "@version 0.1",
+# "doxdocgen.generic.authorEmail": "you@domain.com",
+# "doxdocgen.generic.authorName": "your name",
+# 这三句配置改为自己的个人信息和版本号即可
+# 将以下内容复制到vscode的setting.json(没有就创建)中，doxygen documentation generator插件安装之后使用触发搭配即可自动生成对应注释
 
     "doxdocgen.c.commentPrefix": " * ",
     "doxdocgen.c.factoryMethodText": "Create a {name} object",
