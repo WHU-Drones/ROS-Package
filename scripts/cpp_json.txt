@@ -23,12 +23,12 @@
 			"//#include \"dynamic_reconfigure/server.h\"",
 			"//#include \"${2:PackageName}/${1:$TM_FILENAME_BASE}Config.h\"",
 			"",
-			"class ${1:$TM_FILENAME_BASE}",
+			"class ${1:$TM_FILENAME_BASE}:public ${3:ParentClass}",
 			"{",
 			"public:",
 			"    ${1:$TM_FILENAME_BASE}(ros::NodeHandle* nh, ros::NodeHandle* ns);",
 			"    ~${1:$TM_FILENAME_BASE}();",
-			"    virtual void Run() = 0;",
+			"    void Run();",
 			"private:",
 			"    ros::NodeHandle _nh;",
 			"    ros::NodeHandle _ns;",
@@ -69,6 +69,14 @@
 			"    _ns.~NodeHandle();",
 			"}",
 			"",
+			"void ${1:$TM_FILENAME_BASE}::Run()",
+			"{",
+			"}",
+			"",
+			"//void ${1:$TM_FILENAME_BASE}::DynamicParamServer_Callback(${2:PackageName}::${1:$TM_FILENAME_BASE}Config &config, uint32_t level)",
+			"//{",
+			"//}",
+			"",
 			"void ${1:$TM_FILENAME_BASE}::PublisherInit()",
 			"{",
 			"}",
@@ -95,10 +103,6 @@
 			"    //_dynamic_param_server.setCallback(_f);",
 			"}",
 			"",
-			"//void ${1:$TM_FILENAME_BASE}::DynamicParamServer_Callback(${2:PackageName}::${1:$TM_FILENAME_BASE}Config &config, uint32_t level)",
-			"//{",
-			"//}",
-			"",
 			"$0"
 		],
 		"description": "Create ros node class"
@@ -107,7 +111,7 @@
 	"ROS publisher": {
 		"prefix": "pub",
 		"body": [
-			"_$1_publisher = _nh.advertise<$2>(_$1_topic, ${3:5}, true);",
+			"_${1:Name}_publisher = _nh.advertise<${2:DataType}>(_${1:Name}_topic, ${3:5}, true);",
 			"$0"
 		],
 		"description": "Create a ros publisher"
@@ -116,7 +120,7 @@
 	"ROS subscriber": {
 		"prefix": "sub",
 		"body": [
-			"_$1_subscriber = _nh.subscribe<$2>(_$1_topic, ${3:5}, &$TM_FILENAME_BASE::$4_Callback, this);",
+			"_${1:Name}_subscriber = _nh.subscribe<${2:DataType}>(_${1:Name}_topic, ${3:5}, &$TM_FILENAME_BASE::${4:CallbackName}_Callback, this);",
 			"$0"
 		],
 		"description": "Create a ros subscriber"
@@ -125,11 +129,11 @@
 	"ROS subscriber callback": {
 		"prefix": "subcall",
 		"body": [
-			"void $TM_FILENAME_BASE::$1_Callback(const $2ConstPtr& msg)",
+			"void $TM_FILENAME_BASE::${1:Name}_Callback(const ${2:DataType}ConstPtr& msg)",
 			"{",
-			"    ",
+			"    $0",
 			"}",
-			"$0"
+			""
 		],
 		"description": "Create a ros subscriber callback"
 	},
