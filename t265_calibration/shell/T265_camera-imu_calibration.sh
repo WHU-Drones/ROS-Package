@@ -1,0 +1,1 @@
+kalibr_calibrate_imu_camera --target ../cfg/apriltags.yaml --cam ../cfg/camchain-stereo_calibration.yaml --imu ../cfg/imu.yaml --bag ../dataset/t265_with_imu_record.bag --bag-from-to 10 100 --max-iter 30 --show-extraction

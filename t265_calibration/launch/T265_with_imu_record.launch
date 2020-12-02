@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="left_image_topic" default="/camera/fisheye1/image_raw"/>
+    <arg name="right_image_topic" default="/camera/fisheye2/image_raw"/>
+    <arg name="throttle_frequency" default="20.0"/>
+    <arg name="bag_name" default="t265_with_imu_record"/>
+
+    <rosparam>
+        /camera/tracking_module/enable_auto_exposure: false
+        /camera/tracking_module/exposure: 1000
+        /camera/tracking_module/gain: 5.0
+    </rosparam>
+
+    <include file="$(find realsense2_camera)/launch/rs_t265.launch" >
+        <arg name="enable_sync" value="true"/>，  
+        <arg name="unite_imu_method" value="copy"/>
+    </include>
+    <node pkg="topic_tools" type="throttle" name="left_image_throttle" 
+        args="messages $(arg left_image_topic) $(arg throttle_frequency) /fisheye1"/>
+    <node pkg="topic_tools" type="throttle" name="right_image_throttle" 
+        args="messages $(arg right_image_topic) $(arg throttle_frequency) /fisheye2"/>
+    
+    <node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" />
+    <node pkg="rosbag" type="record" name="bag_record" 
+        args="-o $(find t265_calibration)/dataset/$(arg bag_name).bag /fisheye1 /fisheye2 /camera/imu"/>
+    
+</launch>
