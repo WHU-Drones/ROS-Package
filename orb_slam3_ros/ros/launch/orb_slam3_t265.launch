@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find realsense2_camera)/launch/rs_t265.launch" >
+        <arg name="unite_imu_method" value="linear_interpolation"/>
+    </include>
+
+    <node pkg="orb_slam3_ros" type="orb_slam3_ros_stereo" name="orb_slam3_ros_stereo" output="screen" >
+        <remap from="image_left/image_color_rect" to="/camera/fisheye1/image_raw" />
+        <remap from="image_right/image_color_rect" to="/camera/fisheye2/image_raw" />
+        
+        <param name="publish_pointcloud" type="bool" value="true" />
+        <param name="publish_pose" type="bool" value="true" />
+        <param name="localize_only" type="bool" value="false" />
+        <param name="reset_map" type="bool" value="false" />
+
+        <param name="voc_file" type="string" value="$(find orb_slam3_ros)/orb_slam3/Vocabulary/ORBvoc.txt" />
+        <param name="setting_file" type="string" value="$(find orb_slam3_ros)/orb_slam3/config/T265.yaml" />
+
+        <param name="pointcloud_frame_id" type="string" value="map" />
+        <param name="camera_frame_id" type="string" value="camera_link" />
+    </node>
+
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find orb_slam3_ros)/ros/rviz/orb_slam3_ros.rviz" required="true" />
+</launch>
