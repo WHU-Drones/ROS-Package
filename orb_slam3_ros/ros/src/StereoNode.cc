@@ -27,10 +27,12 @@ int main(int argc, char **argv)
 }
 
 
-StereoNode::StereoNode (const ORB_SLAM3::System::eSensor sensor, ros::NodeHandle &node_handle, image_transport::ImageTransport &image_transport) : CommonNode (sensor, node_handle, image_transport) {
-    left_sub_ = new message_filters::Subscriber<sensor_msgs::Image> (node_handle, "image_left/image_color_rect", 1);
-    right_sub_ = new message_filters::Subscriber<sensor_msgs::Image> (node_handle, "image_right/image_color_rect", 1);
+StereoNode::StereoNode (const ORB_SLAM3::System::eSensor sensor, ros::NodeHandle &node_handle, image_transport::ImageTransport &image_transport):
+    CommonNode (sensor, node_handle, image_transport) {
+    left_sub_ = new message_filters::Subscriber<sensor_msgs::Image> (node_handle, "image_left/image_color_rect", 10);
+    right_sub_ = new message_filters::Subscriber<sensor_msgs::Image> (node_handle, "image_right/image_color_rect", 10);
     camera_info_topic_ = "image_left/camera_info";
+    test_pub_ = node_handle.advertise<std_msgs::Float64>("test", 100, true);
 
     sync_ = new message_filters::Synchronizer<sync_pol> (sync_pol(10), *left_sub_, *right_sub_);
     sync_->registerCallback(boost::bind(&StereoNode::ImageCallback, this, _1, _2));
@@ -45,25 +47,25 @@ StereoNode::~StereoNode () {
 
 
 void StereoNode::ImageCallback (const sensor_msgs::ImageConstPtr& msgLeft, const sensor_msgs::ImageConstPtr& msgRight) {
-  cv_bridge::CvImageConstPtr cv_ptrLeft;
-  try {
-      cv_ptrLeft = cv_bridge::toCvShare(msgLeft);
-  } catch (cv_bridge::Exception& e) {
-      ROS_ERROR("cv_bridge exception: %s", e.what());
-      return;
-  }
+    cv_bridge::CvImageConstPtr cv_ptrLeft;
+    try {
+        cv_ptrLeft = cv_bridge::toCvShare(msgLeft);
+    } catch (cv_bridge::Exception& e) {
+        ROS_ERROR("cv_bridge exception: %s", e.what());
+        return;
+    }
 
-  cv_bridge::CvImageConstPtr cv_ptrRight;
-  try {
-      cv_ptrRight = cv_bridge::toCvShare(msgRight);
-  } catch (cv_bridge::Exception& e) {
-      ROS_ERROR("cv_bridge exception: %s", e.what());
-      return;
-  }
+    cv_bridge::CvImageConstPtr cv_ptrRight;
+    try {
+        cv_ptrRight = cv_bridge::toCvShare(msgRight);
+    } catch (cv_bridge::Exception& e) {
+        ROS_ERROR("cv_bridge exception: %s", e.what());
+        return;
+    }
 
-  current_frame_time_ = msgLeft->header.stamp;
+    current_frame_time_ = msgLeft->header.stamp;
+    test_pub_.publish(cv_ptrLeft->header.stamp.toSec());
+    orb_slam_->TrackStereo(cv_ptrLeft->image, cv_ptrRight->image, cv_ptrLeft->header.stamp.toSec());
 
-  orb_slam_->TrackStereo(cv_ptrLeft->image, cv_ptrRight->image, cv_ptrLeft->header.stamp.toSec());
-
-  Update ();
+    Update ();
 }

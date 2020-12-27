@@ -36,6 +36,7 @@
 #include <sensor_msgs/image_encodings.h>
 #include <opencv2/core/core.hpp>
 #include <tf/transform_broadcaster.h>
+#include <std_msgs/Float64.h>
 
 #include "System.h"
 #include "CommonNode.h"
@@ -52,5 +53,6 @@ private:
     message_filters::Subscriber<sensor_msgs::Image> *left_sub_;
     message_filters::Subscriber<sensor_msgs::Image> *right_sub_;
     message_filters::Synchronizer<sync_pol> *sync_;
+    ros::Publisher test_pub_;
 };
 

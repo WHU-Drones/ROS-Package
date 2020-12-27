@@ -20,6 +20,7 @@ void CommonNode::Init () {
   node_handle_.param(name_of_node_+ "/publish_pointcloud", publish_pointcloud_param_, true);
   node_handle_.param(name_of_node_+ "/publish_pose", publish_pose_param_, true);
   node_handle_.param(name_of_node_+ "/publish_tf", publish_tf_param_, true);
+  node_handle_.param(name_of_node_+ "/publish_path", publish_path_param_, true);
   node_handle_.param<std::string>(name_of_node_+ "/pointcloud_frame_id", map_frame_id_param_, "map");
   node_handle_.param<std::string>(name_of_node_+ "/camera_frame_id", camera_frame_id_param_, "camera_link");
   node_handle_.param<std::string>(name_of_node_ + "/voc_file", voc_file_name_param_, "file_not_set");
@@ -40,6 +41,11 @@ void CommonNode::Init () {
   if (publish_pose_param_) {
     pose_publisher_ = node_handle_.advertise<geometry_msgs::PoseStamped> (name_of_node_+"/pose", 1);
   }
+
+  if (publish_path_param_) {
+    path_publisher_ = node_handle_.advertise<nav_msgs::Path> (name_of_node_+"/path", 1);
+  }
+  
 }
 
 
@@ -83,6 +89,12 @@ void CommonNode::PublishPositionAsPoseStamped (cv::Mat position) {
   geometry_msgs::PoseStamped pose_msg;
   tf::poseStampedTFToMsg (grasp_tf_pose, pose_msg);
   pose_publisher_.publish(pose_msg);
+  if (publish_path_param_) {
+    path_.header.stamp = current_frame_time_;
+    path_.header.frame_id = map_frame_id_param_;
+    path_.poses.push_back(pose_msg);
+    path_publisher_.publish(path_);
+  }
 }
 
 

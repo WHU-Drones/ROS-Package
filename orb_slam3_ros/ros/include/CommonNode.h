@@ -38,6 +38,7 @@
 #include <sensor_msgs/image_encodings.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <nav_msgs/Path.h>
 #include <sensor_msgs/CameraInfo.h>
 
 #include "System.h"
@@ -72,6 +73,9 @@ class CommonNode
     image_transport::Publisher rendered_image_publisher_;
     ros::Publisher map_points_publisher_;
     ros::Publisher pose_publisher_;
+    ros::Publisher path_publisher_;
+
+    nav_msgs::Path path_;
 
     std::string name_of_node_;
     ros::NodeHandle node_handle_;
@@ -86,6 +90,7 @@ class CommonNode
     bool publish_pointcloud_param_;
     bool publish_tf_param_;
     bool publish_pose_param_;
+    bool publish_path_param_;
 };
 
 #endif //ORBSLAM3_ROS_NODE_H_
