@@ -44,13 +44,14 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   sensor_msgs
   dynamic_reconfigure
+  nav_msgs
 )
 
 ## System dependencies are found with CMake's conventions
 set(OpenCV_DIR /usr/local/opencv-3.4.12/share/OpenCV)
-find_package(OpenCV 3.4.12)
+find_package(OpenCV 3)
 if(NOT OpenCV_FOUND)
-  message(FATAL_ERROR "OpenCV 3.4.12 not found.")
+  message(FATAL_ERROR "OpenCV 3 not found.")
 endif()
 
 find_package(Eigen3 3.1.0 REQUIRED)
@@ -147,5 +148,15 @@ ros/src/CommonNode.cc
 add_dependencies (${PROJECT_NAME}_stereo ${PROJECT_NAME} ${PROJECT_NAME}_gencfg)
 
 target_link_libraries(${PROJECT_NAME}_stereo
+${LIBS_ROS}
+)
+
+add_executable (${PROJECT_NAME}_stereo_inertial
+ros/src/StereoInertialNode.cc
+ros/src/CommonNode.cc
+)
+add_dependencies (${PROJECT_NAME}_stereo_inertial ${PROJECT_NAME} ${PROJECT_NAME}_gencfg)
+
+target_link_libraries(${PROJECT_NAME}_stereo_inertial
 ${LIBS_ROS}
 )
