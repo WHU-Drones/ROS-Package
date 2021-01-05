@@ -180,3 +180,4 @@ struct pExpectPos
     int16_t z_angular_pos;
 };
 
+#pragma pack(0)

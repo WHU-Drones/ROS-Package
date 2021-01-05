@@ -100,3 +100,5 @@ struct pQuat
     double qz;
     double qw;
 };
+
+#pragma pack(0)
