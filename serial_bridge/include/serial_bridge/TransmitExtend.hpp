@@ -31,7 +31,7 @@
 #pragma once
 
 #include <serial/serial.h>
-#include <geometry_msgs/PoseStamped.h>
+#include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Twist.h>
 
 #include "ProtocolExtend.hpp"
@@ -72,6 +72,6 @@ public:
     pPointXYZ mPointXYZ;
 
     int DataParse();
-    void PointXY_callback(const geometry_msgs::PoseStamped::ConstPtr& msg);
+    void PointXY_callback(const nav_msgs::Odometry::ConstPtr& msg);
     void ExpectVel_callback(const geometry_msgs::Twist::ConstPtr& msg);
 };

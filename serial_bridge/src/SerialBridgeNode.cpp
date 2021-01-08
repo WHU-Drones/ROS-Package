@@ -31,6 +31,7 @@
 #include <sensor_msgs/Imu.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Point.h>
+#include <nav_msgs/Odometry.h>
 
 #include "SerialBridgeNode.hpp"
 
@@ -146,7 +147,7 @@ void SerialBridgeNode::PublisherInit() {
  * 
  */
 void SerialBridgeNode::SubscriberInit() {
-    pointxy_subscriber_ = nh_.subscribe<geometry_msgs::PoseStamped>(pointxy_topic_, 5,
+    pointxy_subscriber_ = nh_.subscribe<nav_msgs::Odometry>(pointxy_topic_, 5,
                             &TransmitExtend::PointXY_callback, this->serial_bridge_);
     expect_vel_subscriber_ = nh_.subscribe<geometry_msgs::Twist>(expect_vel_topic_, 5,
                             &TransmitExtend::ExpectVel_callback, this->serial_bridge_);

@@ -51,14 +51,14 @@ TransmitExtend::~TransmitExtend(){ }
  * 
  * @param msg pose given by other nodes
  */
-void TransmitExtend::PointXY_callback(const geometry_msgs::PoseStamped::ConstPtr& msg)
+void TransmitExtend::PointXY_callback(const nav_msgs::Odometry::ConstPtr& msg)
 {
     pFrame frame;
     pPointXY pointxy;
     frame.func = FU_PointXY;
     frame.length = LU_PointXY;
-    pointxy.point.x = (float)msg->pose.position.x * 100;
-    pointxy.point.y = (float)msg->pose.position.y * 100;
+    pointxy.point.x = (float)msg->pose.pose.position.x * 100;
+    pointxy.point.y = (float)msg->pose.pose.position.y * 100;
 
     SendData<pPointXY>(&frame, &pointxy);
 }

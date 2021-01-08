@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+
+    <include file="$(find realsense2_camera)/launch/rs_t265.launch" >
+        <arg name="unite_imu_method" value="linear_interpolation"/>
+    </include>
+
+    <node pkg="serial_bridge" type="serial_bridge_node" name="serial_bridge_node" output="screen">
+        <param name="serial_port_path" type="string" value="/dev/AnoCom"/>
+        <param name="serial_baundrate" type="int" value="115200"/>
+        <param name="pointxy_topic" type="string" value="/camera/odom/sample"/>
+    </node>
+    
+</launch>
