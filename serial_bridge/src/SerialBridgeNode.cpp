@@ -42,11 +42,13 @@ int main(int argc, char **argv)
 
     ros::NodeHandle node_handle;
     SerialBridgeNode node(node_handle);
+    ros::Rate loop_rate(200);
 
     while (ros::ok())
     {
        node.Run();
        ros::spinOnce();
+       loop_rate.sleep();
     }
 
     return 0;
@@ -97,8 +99,8 @@ SerialBridgeNode::~SerialBridgeNode() {
 void SerialBridgeNode::Run() {
     if (serial_bridge_ != NULL) {
         //start data parse
-        int flag = serial_bridge_->DataParse();
-        if (flag == IMU_Flag) {
+        ParseFlag flag = serial_bridge_->DataParse();
+        if (flag.IMU_Flag == true) {
             sensor_msgs::Imu imu;
             imu.angular_velocity.x = serial_bridge_->mIMU.angular_vel.x;
             imu.angular_velocity.y = serial_bridge_->mIMU.angular_vel.y;
@@ -109,10 +111,10 @@ void SerialBridgeNode::Run() {
 
             imu_publisher_.publish(imu);
         }
-        else if (flag == T_Flag) {
+        else if (flag.T_Flag == true) {
             
         }
-        else if (flag == PointXYZ_Flag) {
+        else if (flag.PointXYZ_Flag == true) {
             
         }
     }

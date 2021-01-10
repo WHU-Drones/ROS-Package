@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <launch>
 
-    <arg name="throttle_frequency" default="50.0"/>
+    <!-- <arg name="throttle_frequency" default="50.0"/>
 
     <include file="$(find realsense2_camera)/launch/rs_t265.launch" >
         <arg name="unite_imu_method" value="linear_interpolation"/>
     </include>
 
     <node pkg="topic_tools" type="throttle" name="odom_throttle" 
-        args="messages /camera/odom/sample $(arg throttle_frequency) /throttled_odom"/>
+        args="messages /camera/odom/sample $(arg throttle_frequency) /throttled_odom"/> -->
 
     <node pkg="serial_bridge" type="serial_bridge_node" name="serial_bridge_node" output="screen">
         <param name="serial_port_path" type="string" value="/dev/AnoCom"/>
@@ -16,6 +16,6 @@
         <param name="pointxy_topic" type="string" value="/throttled_odom"/>
     </node>
     
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find serial_bridge)/rviz/serial_bridge.rviz" required="true" />
+    <!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(find serial_bridge)/rviz/serial_bridge.rviz" required="true" /> -->
 
 </launch>

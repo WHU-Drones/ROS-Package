@@ -30,6 +30,8 @@
  */
 #include "TransmitExtend.hpp"
 
+using namespace std;
+
 /**
  * @brief Construct a new Transmit Extend:: Transmit Extend object
  * 
@@ -82,43 +84,60 @@ void TransmitExtend::ExpectVel_callback(const geometry_msgs::Twist::ConstPtr& ms
     SendData<pExpectVel>(&frame, &expect_vel);
 }
 
+void TransmitExtend::ClearFlag(ParseFlag *flag)
+{
+    flag->IMU_Flag = false;
+    flag->T_Flag = false;
+    flag->PointXYZ_Flag = false;
+}
+
 /**
  * @brief read data from serial buffer and parse it
  * 
  * @return int data parse state
  */
-int TransmitExtend::DataParse()
+ParseFlag TransmitExtend::DataParse()
 {
-    if(mSerial->available())
-    {
-        mSerial->read(&mRecData, 1);
+    ParseFlag flag;
+    ClearFlag (&flag);
 
-        if(mRecCount == 0)
-            mSum = 0; //reset
-        if(mRecCount < 2)
+    
+    size_t size = mSerial->available();
+    if(size)
+    {
+        vector<uint8_t> buffer;
+        mSerial->read(&buffer[0], size);
+
+        for (uint8_t i = 0; i < buffer.size(); i++)
         {
-            HeaderCheck();
-        }
-        else if (mRecCount < 4)
-        {
-            FrameParse();
-        }
-        else if (mRecCount < 4 + mFrame.length)
-        {
-            PayloadParse();
-        }
-        else
-        {
-            if (CheckSum())
+            mRecData = buffer[i];
+            if(mRecCount == 0)
+                mSum = 0; //reset
+            if(mRecCount < 2)
             {
-                if(mFrame.func == FL_IMU) return IMU_Flag;
-                else if(mFrame.func == FL_T) return T_Flag;
-                else if (mFrame.func == FL_PointXYZ) return PointXYZ_Flag;
+                HeaderCheck();
             }
-            mRecCount = 0;
+            else if (mRecCount < 4)
+            {
+                FrameParse();
+            }
+            else if (mRecCount < 4 + mFrame.length)
+            {
+                PayloadParse();
+            }
+            else
+            {
+                if (CheckSum())
+                {
+                    if(mFrame.func == FL_IMU) flag.IMU_Flag = true;
+                    else if(mFrame.func == FL_T) flag.T_Flag = true;
+                    else if (mFrame.func == FL_PointXYZ) flag.PointXYZ_Flag = true;
+                }
+                mRecCount = 0;
+            }
         }
     }
-    return None_Flag;
+    return flag;
 }
 
 /**

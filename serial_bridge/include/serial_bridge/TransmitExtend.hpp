@@ -30,6 +30,8 @@
  */
 #pragma once
 
+#include <vector>
+
 #include <serial/serial.h>
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Twist.h>
@@ -38,16 +40,16 @@
 #include "TransmitBasic.hpp"
 
 /**
- * @brief enum data parse state
+ * @brief parse flag struct
  * 
  */
-enum
+struct ParseFlag
 {
-    None_Flag = 0,
-    IMU_Flag,
-    T_Flag,
-    PointXYZ_Flag,
+    bool IMU_Flag;
+    bool T_Flag;
+    bool PointXYZ_Flag;
 };
+
 
 class TransmitExtend: public TransmitBasic
 {
@@ -57,6 +59,7 @@ private:
     uint8_t mSum;
     uint8_t mRecData;
 
+    void ClearFlag(ParseFlag *flag);
     void HeaderCheck();
     void FrameParse();
     void PayloadParse();
@@ -71,7 +74,7 @@ public:
     pT mT;
     pPointXYZ mPointXYZ;
 
-    int DataParse();
+    ParseFlag DataParse();
     void PointXY_callback(const nav_msgs::Odometry::ConstPtr& msg);
     void ExpectVel_callback(const geometry_msgs::Twist::ConstPtr& msg);
 };
