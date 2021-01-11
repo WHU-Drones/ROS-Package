@@ -59,6 +59,10 @@ private:
     uint8_t mSum;
     uint8_t mRecData;
 
+    pIMU mTempIMU;
+    pT mTempT;
+    pPointXYZ mTempPointXYZ;
+
     void ClearFlag(ParseFlag *flag);
     void HeaderCheck();
     void FrameParse();

@@ -100,20 +100,19 @@ ParseFlag TransmitExtend::DataParse()
 {
     ParseFlag flag;
     ClearFlag (&flag);
-
     
     size_t size = mSerial->available();
     if(size)
     {
         vector<uint8_t> buffer;
-        mSerial->read(&buffer[0], size);
+        mSerial->read(buffer, size);
 
-        for (uint8_t i = 0; i < buffer.size(); i++)
+        for (int i = 0; i < buffer.size(); i++)
         {
             mRecData = buffer[i];
-            if(mRecCount == 0)
+            if (mRecCount == 0)
                 mSum = 0; //reset
-            if(mRecCount < 2)
+            if (mRecCount < 2)
             {
                 HeaderCheck();
             }
@@ -129,9 +128,21 @@ ParseFlag TransmitExtend::DataParse()
             {
                 if (CheckSum())
                 {
-                    if(mFrame.func == FL_IMU) flag.IMU_Flag = true;
-                    else if(mFrame.func == FL_T) flag.T_Flag = true;
-                    else if (mFrame.func == FL_PointXYZ) flag.PointXYZ_Flag = true;
+                    if (mFrame.func == FL_IMU)
+                    {
+                        mIMU = mTempIMU;
+                        flag.IMU_Flag = true;
+                    }
+                    else if (mFrame.func == FL_T)
+                    {
+                        mT = mTempT;
+                        flag.T_Flag = true;
+                    }
+                    else if (mFrame.func == FL_PointXYZ)
+                    {
+                        mPointXYZ = mTempPointXYZ;
+                        flag.PointXYZ_Flag = true;
+                    }
                 }
                 mRecCount = 0;
             }
@@ -174,11 +185,11 @@ void TransmitExtend::FrameParse()
 void TransmitExtend::PayloadParse()
 {
     if(mFrame.func == FL_IMU)
-        ((uint8_t*)&mIMU)[mRecCount - 4] = mRecData;
+        ((uint8_t*)&mTempIMU)[mRecCount - 4] = mRecData;
     else if(mFrame.func == FL_T)
-        ((uint8_t*)&mT)[mRecCount - 4] = mRecData;
+        ((uint8_t*)&mTempT)[mRecCount - 4] = mRecData;
     else if(mFrame.func == FL_PointXYZ)
-        ((uint8_t*)&mPointXYZ)[mRecCount - 4] = mRecData;
+        ((uint8_t*)&mTempPointXYZ)[mRecCount - 4] = mRecData;
     
     mSum += (uint8_t)mRecData;
     ++mRecCount;
