@@ -30,55 +30,18 @@
  */
 #pragma once
 
-#include <vector>
-
-#include <serial/serial.h>
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Twist.h>
 
 #include "ProtocolExtend.hpp"
 #include "TransmitBasic.hpp"
 
-/**
- * @brief parse flag struct
- * 
- */
-struct ParseFlag
-{
-    bool IMU_Flag;
-    bool T_Flag;
-    bool PointXYZ_Flag;
-};
-
-
 class TransmitExtend: public TransmitBasic
-{
-private:
-    serial::Serial* mSerial;
-    uint8_t mRecCount;
-    uint8_t mSum;
-    uint8_t mRecData;
-
-    pIMU mTempIMU;
-    pT mTempT;
-    pPointXYZ mTempPointXYZ;
-
-    void ClearFlag(ParseFlag *flag);
-    void HeaderCheck();
-    void FrameParse();
-    void PayloadParse();
-    bool CheckSum();
-    
+{ 
 public:
-    TransmitExtend(serial::Serial* serial_port, std::string port_path, int baundrate);
+    TransmitExtend(std::string port_path, int baundrate);
     ~TransmitExtend();
 
-    pFrame mFrame;
-    pIMU mIMU;
-    pT mT;
-    pPointXYZ mPointXYZ;
-
-    ParseFlag DataParse();
     void PointXY_callback(const nav_msgs::Odometry::ConstPtr& msg);
     void ExpectVel_callback(const geometry_msgs::Twist::ConstPtr& msg);
 };

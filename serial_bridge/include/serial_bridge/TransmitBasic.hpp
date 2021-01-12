@@ -30,22 +30,22 @@
  */
 #pragma once
 
-#include <serial/serial.h>
-
+#include "serialport.h"
 #include "ProtocolExtend.hpp"
 
 class TransmitBasic
 {
 private:
-    serial::Serial* mSerial;
+    SerialPort* mSerial = NULL;
     std::string mPortPath;
     int mBaundrate;
+    bool mSerialOpen = true;
 
     void SerialInit();
     template <typename T> void add_sum(uint8_t* sum, T* sum_data, uint8_t length);
     
 public:
-    TransmitBasic(serial::Serial* serial_port, std::string port_path, int baundrate);
+    TransmitBasic(std::string port_path, int baundrate);
     ~TransmitBasic();
     template <typename T> void SendData(pFrame* frame, T* data);
 };
@@ -62,16 +62,16 @@ void TransmitBasic::add_sum(uint8_t* sum, T* sum_data, uint8_t length)
 template <typename T>
 void TransmitBasic::SendData(pFrame* frame, T* data)
 {
-    if (mSerial->isOpen())
+    if (mSerialOpen)
     {
         uint8_t sum = 0;
         add_sum<const uint8_t>(&sum, packet_ID, 2);
         add_sum<pFrame>(&sum, frame, 2);
         add_sum<T>(&sum, data, frame->length);
         
-        mSerial->write(packet_ID, 2);
-        mSerial->write((uint8_t*)frame, 2);
-        mSerial->write((uint8_t*)data, frame->length);
-        mSerial->write(&sum, 1);
+        mSerial->writeBytes(packet_ID, 2);
+        mSerial->writeBytes((uint8_t*)frame, 2);
+        mSerial->writeBytes((uint8_t*)data, frame->length);
+        mSerial->writeBytes(&sum, 1);
     }
 }

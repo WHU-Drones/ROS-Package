@@ -35,12 +35,11 @@
 /**
  * @brief Construct a new Transmit Basic:: Transmit Basic object
  * 
- * @param serial_port serial object
- * @param port_path serial port path
- * @param baundrate serial baundrate
+ * @param port_path 
+ * @param baundrate 
  */
-TransmitBasic::TransmitBasic(serial::Serial* serial_port, std::string port_path, int baundrate):
-    mSerial(serial_port), mPortPath(port_path), mBaundrate(baundrate)
+TransmitBasic::TransmitBasic(std::string port_path, int baundrate):
+    mPortPath(port_path), mBaundrate(baundrate)
 {
     SerialInit();
 }
@@ -51,7 +50,9 @@ TransmitBasic::TransmitBasic(serial::Serial* serial_port, std::string port_path,
  */
 TransmitBasic::~TransmitBasic()
 {
-    mSerial->close();
+    mSerial->closePort();
+    if (mSerial != NULL)
+        delete mSerial;
 }
 
 /**
@@ -60,22 +61,12 @@ TransmitBasic::~TransmitBasic()
  */
 void TransmitBasic::SerialInit()
 {
-    mSerial->setPort(mPortPath);
-    mSerial->setBaudrate(mBaundrate);
-    serial::Timeout timeout = serial::Timeout::simpleTimeout(1000);
-    mSerial->setTimeout(timeout);
-
-    try
+    mSerial = new SerialPort(mPortPath.c_str(), mBaundrate);
+    if (mSerial->openPort())
     {
-        mSerial->open();
-    }
-    catch (serial::IOException& e)
-    {
+        mSerialOpen = false;
         ROS_ERROR_STREAM("Unable to open serial port.");
     }
-
-    if (mSerial->isOpen())
-    {
+    else
         ROS_INFO_STREAM("Serial start.");
-    }
 }

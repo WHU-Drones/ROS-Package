@@ -13,7 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   sensor_msgs
   std_msgs
-  serial
   nav_msgs
 )
 
@@ -138,6 +137,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(${PROJECT_NAME}_node
+  src/serialport.cpp
   src/SerialBridgeNode.cpp
   src/TransmitExtend.cpp
   src/TransmitBasic.cpp

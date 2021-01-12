@@ -42,14 +42,8 @@ int main(int argc, char **argv)
 
     ros::NodeHandle node_handle;
     SerialBridgeNode node(node_handle);
-    ros::Rate loop_rate(200);
 
-    while (ros::ok())
-    {
-       node.Run();
-       ros::spinOnce();
-       loop_rate.sleep();
-    }
+    ros::spin();
 
     return 0;
 }
@@ -64,10 +58,6 @@ SerialBridgeNode::SerialBridgeNode(ros::NodeHandle &nh):nh_(nh) {
 
     nh_.param<std::string>(node_name_ + "/serial_port_path", serial_port_path_, "/dev/AnoCom");
     nh_.param<int>(node_name_ + "/serial_baundrate", serial_baundrate_, 115200);
-
-    nh_.param<std::string>(node_name_ + "/imu_topic", imu_topic_, "imu");
-    nh_.param<std::string>(node_name_ + "/T_topic", T_topic_, "T");
-    nh_.param<std::string>(node_name_ + "/point_topic", point_topic_, "point");
 
     nh_.param<std::string>(node_name_ + "/pointxy_topic", pointxy_topic_, "pointxy");
     nh_.param<std::string>(node_name_ + "/expect_vel_topic", expect_vel_topic_, "expect_vel");
@@ -96,38 +86,14 @@ SerialBridgeNode::~SerialBridgeNode() {
  * @brief class interface runs in while(ros::ok())
  * 
  */
-void SerialBridgeNode::Run() {
-    if (serial_bridge_ != NULL) {
-        //start data parse
-        ParseFlag flag = serial_bridge_->DataParse();
-        geometry_msgs::Point point;
-        point_publisher_.publish(point);
-        if (flag.IMU_Flag == true) {
-            sensor_msgs::Imu imu;
-            imu.angular_velocity.x = serial_bridge_->mIMU.angular_vel.x;
-            imu.angular_velocity.y = serial_bridge_->mIMU.angular_vel.y;
-            imu.angular_velocity.z = serial_bridge_->mIMU.angular_vel.z;
-            imu.linear_acceleration.x = serial_bridge_->mIMU.linear_acc.x / 100;
-            imu.linear_acceleration.y = serial_bridge_->mIMU.linear_acc.y / 100;
-            imu.linear_acceleration.z = serial_bridge_->mIMU.linear_acc.z / 100;
-
-            imu_publisher_.publish(imu);
-        }
-        if (flag.T_Flag == true) {
-            
-        }
-        if (flag.PointXYZ_Flag == true) {
-            
-        }
-    }
-}
+void SerialBridgeNode::Run() { }
 
 /**
  * @brief init serial
  * 
  */
 void SerialBridgeNode::SerialInit() {
-    serial_bridge_ = new TransmitExtend(&serial_port_, serial_port_path_, serial_baundrate_);
+    serial_bridge_ = new TransmitExtend(serial_port_path_, serial_baundrate_);
 }
 
 /**
@@ -140,11 +106,7 @@ void SerialBridgeNode::SerialInit() {
  * @brief init publisher
  * 
  */
-void SerialBridgeNode::PublisherInit() {
-    imu_publisher_ = nh_.advertise<sensor_msgs::Imu>(imu_topic_, 200, true);
-    T_publisher_ = nh_.advertise<geometry_msgs::PoseStamped>(T_topic_, 50, true);
-    point_publisher_ = nh_.advertise<geometry_msgs::Point>(point_topic_, 50, true);
-}
+void SerialBridgeNode::PublisherInit() { }
 
 /**
  * @brief init subscriber

@@ -50,16 +50,8 @@ private:
     std::string node_name_;
 
     TransmitExtend* serial_bridge_ = NULL;
-    serial::Serial serial_port_;
     std::string serial_port_path_;
     int serial_baundrate_;
-
-    ros::Publisher imu_publisher_;
-    std::string imu_topic_;
-    ros::Publisher T_publisher_;
-    std::string T_topic_;
-    ros::Publisher point_publisher_;
-    std::string point_topic_;
 
     ros::Subscriber pointxy_subscriber_;
     std::string pointxy_topic_;
