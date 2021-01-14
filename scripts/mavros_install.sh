@@ -1,3 +1,4 @@
+sudo apt-get install python-catkin-tools python-rosinstall-generator -y
 mkdir -p ~/Code/mavlink_ws/src
 cd ~/Code/mavlink_ws
 catkin init
