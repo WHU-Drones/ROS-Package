@@ -1,0 +1,9 @@
+# link.service
+[Unit]
+Description=this is link service
+
+[Service]
+ExecStart=/home/nvidia/Code/ROS-Package/scripts/link.sh
+
+[Install]
+WantedBy=multi-user.target

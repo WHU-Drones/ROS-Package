@@ -1,0 +1,1 @@
+KERNEL=="video*", ATTRS{idVendor}=="0211", ATTRS{idProduct}=="5838", ATTR{index}=="0", MODE:="0777", SYMLINK+="LenaCam"
