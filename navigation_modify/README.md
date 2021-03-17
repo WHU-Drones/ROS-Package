@@ -6,11 +6,13 @@ Before using it, we suggest that you create a new ROS workspace, then put these 
 - Robot simulation
 
 (1) Make sure you have set up the gazebo simulation environment
+
 (2) Run the following code in order:
 ```shell
 roslaunch mrobot_gazebo mrobot_laser_nav_gazebo.launch
 roslaunch mrobot_navigation exploring_slam_demo.launch
 ```
+
 (3) Then you can control the car in the simulation environment and see the built map in rviz.
 
 - Use the recorded rosbag
