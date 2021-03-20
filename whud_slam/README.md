@@ -1,4 +1,4 @@
-# whud_cartographer
+# whud_slam
 These files are used to configure the cartographer, after configuration, it can use scan and imu data to build maps.
 
 Before using, you need to complete the following steps:

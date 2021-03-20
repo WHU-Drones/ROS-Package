@@ -10,7 +10,7 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
-  sensor_msgs
+  laser_filters
 )
 
 ## System dependencies are found with CMake's conventions
@@ -104,8 +104,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES my_laser_filter
-#  CATKIN_DEPENDS roscpp rosoy sensor_msgs
+#  LIBRARIES whud_laser_filter
+ CATKIN_DEPENDS roscpp rospy laser_filters
 #  DEPENDS system_lib
 )
 
@@ -122,7 +122,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/my_laser_filter.cpp
+#   src/${PROJECT_NAME}/whud_laser_filter.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -133,7 +133,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/my_laser_filter_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/whud_laser_filter_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -197,7 +197,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_my_laser_filter.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_whud_laser_filter.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
