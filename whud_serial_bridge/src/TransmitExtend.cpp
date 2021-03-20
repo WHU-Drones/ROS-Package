@@ -48,37 +48,36 @@ TransmitExtend::TransmitExtend(std::string port_path, int baundrate):
 TransmitExtend::~TransmitExtend(){ }
 
 /**
- * @brief receive point(ros msg) and send it to stm32
+ * @brief receive Lidar-SLAM Point(ros msg) and send it to stm32
  * 
- * @param msg pose given by other nodes
+ * @param msg odometry given by other nodes
  */
-void TransmitExtend::PointXY_callback(const nav_msgs::Odometry::ConstPtr& msg)
+void TransmitExtend::LidarSlam_Point_callback(const nav_msgs::Odometry::ConstPtr& msg)
 {
     pFrame frame;
-    pPointXY pointxy;
-    frame.func = FU_PointXY;
-    frame.length = LU_PointXY;
-    pointxy.point.x = (float)msg->pose.pose.position.x * 100;
-    pointxy.point.y = (float)msg->pose.pose.position.y * 100;
+    p_LidarSlam_Point lidar_slam_point;
+    frame.func = F_LidarSlam_Point;
+    frame.length = L_LidarSlam_Point;
+    lidar_slam_point.point.x = (int16_t)(msg->pose.pose.position.x * 100);
+    lidar_slam_point.point.y = (int16_t)(msg->pose.pose.position.y * 100);
 
-    SendData<pPointXY>(&frame, &pointxy);
+    SendData<p_LidarSlam_Point>(&frame, &lidar_slam_point);
 }
 
 /**
- * @brief receive velocity(ros msg) and send it to stm32
+ * @brief receive V-Slam Point(ros msg) and send it to stm32
  * 
- * @param msg twist given by other nodes
+ * @param msg odometry given by other nodes
  */
-void TransmitExtend::ExpectVel_callback(const geometry_msgs::Twist::ConstPtr& msg)
+void TransmitExtend::VSlam_Point_callback(const nav_msgs::Odometry::ConstPtr& msg)
 {
     pFrame frame;
-    pExpectVel expect_vel;
-    frame.func = FU_ExpectVel;
-    frame.length = LU_ExpectVel;
-    expect_vel.linear_vel.x = msg->linear.x * 100;
-    expect_vel.linear_vel.y = msg->linear.y * 100;
-    expect_vel.linear_vel.z = msg->linear.z * 100;
-    expect_vel.z_angular_vel = msg->angular.z;
+    p_VSlam_Point vslam_point;
+    frame.func = F_VSlam_Point;
+    frame.length = L_VSlam_Point;
+    vslam_point.point.x = (int16_t)(msg->pose.pose.position.x * 100);
+    vslam_point.point.y = (int16_t)(msg->pose.pose.position.y * 100);
+    vslam_point.point.z = (int16_t)(msg->pose.pose.position.z * 100);
 
-    SendData<pExpectVel>(&frame, &expect_vel);
+    SendData<p_VSlam_Point>(&frame, &vslam_point);
 }

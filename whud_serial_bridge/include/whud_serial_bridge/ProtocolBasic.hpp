@@ -1,9 +1,9 @@
 /**
- * @file TransmitExtend.hpp
+ * @file ProtocolBasic.hpp
  * @author LauZanMo (LauZanMo@whu.edu.cn)
  * @brief 
  * @version 1.0
- * @date 2021-01-05
+ * @date 2021-01-03
  * 
  * MIT License
  * 
@@ -30,18 +30,60 @@
  */
 #pragma once
 
-#include <nav_msgs/Odometry.h>
-#include <geometry_msgs/Twist.h>
+#include <iostream>
 
-#include "ProtocolExtend.hpp"
-#include "TransmitBasic.hpp"
+#pragma pack(1)
 
-class TransmitExtend: public TransmitBasic
-{ 
-public:
-    TransmitExtend(std::string port_path, int baundrate);
-    ~TransmitExtend();
+/**
+ * @brief header of frame
+ * 
+ */
+static const uint8_t packet_ID[2] = {0xAA, 0xAA};
 
-    void PointXY_callback(const nav_msgs::Odometry::ConstPtr& msg);
-    void ExpectVel_callback(const geometry_msgs::Twist::ConstPtr& msg);
+/**
+ * @brief frame struct in protocol
+ * 
+ * @note 
+ * first character:
+ * p means data protocol
+ */
+struct pFrame
+{
+    uint8_t func;
+    uint8_t length;
 };
+
+/**
+ * @brief vector2d struct in protocol
+ * 
+ * @tparam T 
+ * 
+ * @note 
+ * first character:
+ * p means data protocol
+ */
+template <typename T>
+struct pVector2
+{
+    T x;
+    T y;
+};
+
+/**
+ * @brief vector3d struct in protocol
+ * 
+ * @tparam T 
+ * 
+ * @note 
+ * first character:
+ * p means data protocol
+ */
+template <typename T>
+struct pVector3
+{
+    T x;
+    T y;
+    T z;
+};
+
+#pragma pack(0)

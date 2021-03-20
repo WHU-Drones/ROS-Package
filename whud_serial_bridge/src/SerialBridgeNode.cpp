@@ -56,11 +56,11 @@ int main(int argc, char **argv)
 SerialBridgeNode::SerialBridgeNode(ros::NodeHandle &nh):nh_(nh) {
     node_name_ = ros::this_node::getName();
 
-    nh_.param<std::string>(node_name_ + "/serial_port_path", serial_port_path_, "/dev/AnoCom");
+    nh_.param<std::string>(node_name_ + "/serial_port_path", serial_port_path_, "/dev/ttyUSB0");
     nh_.param<int>(node_name_ + "/serial_baundrate", serial_baundrate_, 115200);
 
-    nh_.param<std::string>(node_name_ + "/pointxy_topic", pointxy_topic_, "pointxy");
-    nh_.param<std::string>(node_name_ + "/expect_vel_topic", expect_vel_topic_, "expect_vel");
+    nh_.param<std::string>(node_name_ + "/lidar_slam_point_topic", lidar_slam_point_topic_, "lidar_slam_point");
+    nh_.param<std::string>(node_name_ + "/vslam_point_topic", vslam_point_topic_, "vslam_point");
 
     SerialInit();
 
@@ -113,10 +113,10 @@ void SerialBridgeNode::PublisherInit() { }
  * 
  */
 void SerialBridgeNode::SubscriberInit() {
-    pointxy_subscriber_ = nh_.subscribe<nav_msgs::Odometry>(pointxy_topic_, 5,
-                            &TransmitExtend::PointXY_callback, this->serial_bridge_);
-    expect_vel_subscriber_ = nh_.subscribe<geometry_msgs::Twist>(expect_vel_topic_, 5,
-                            &TransmitExtend::ExpectVel_callback, this->serial_bridge_);
+    lidar_slam_point_subscriber_ = nh_.subscribe<nav_msgs::Odometry>(lidar_slam_point_topic_, 1,
+                            &TransmitExtend::LidarSlam_Point_callback, this->serial_bridge_);
+    vslam_point_subscriber_ = nh_.subscribe<nav_msgs::Odometry>(vslam_point_topic_, 1,
+                            &TransmitExtend::VSlam_Point_callback, this->serial_bridge_);
 }
 
 /**

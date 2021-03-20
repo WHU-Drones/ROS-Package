@@ -1,9 +1,9 @@
 /**
- * @file SerialBridgeNode.hpp
+ * @file ProtocolExtend.hpp
  * @author LauZanMo (LauZanMo@whu.edu.cn)
  * @brief 
  * @version 1.0
- * @date 2021-01-05
+ * @date 2021-01-03
  * 
  * MIT License
  * 
@@ -31,43 +31,64 @@
 #pragma once
 
 #include <iostream>
-#include <ros/ros.h>
-#include <serial/serial.h>
-//#include <dynamic_reconfigure/server.h>
 
-//#include "SerialBridgeNodeConfig.h"
-#include "TransmitExtend.hpp"
+#include "ProtocolBasic.hpp"
 
-class SerialBridgeNode
+/**
+ * @brief enum the function words with order number
+ * 
+ * first character:
+ * F means function word
+ */
+enum
 {
-public:
-    SerialBridgeNode(ros::NodeHandle &nh);
-    ~SerialBridgeNode();
-    void Run();
-
-private:
-    ros::NodeHandle nh_;
-    std::string node_name_;
-
-    TransmitExtend* serial_bridge_ = NULL;
-    std::string serial_port_path_;
-    int serial_baundrate_;
-
-    ros::Subscriber pointxy_subscriber_;
-    std::string pointxy_topic_;
-    ros::Subscriber expect_vel_subscriber_;
-    std::string expect_vel_topic_;
-    
-    //dynamic_reconfigure::Server<serial_bridge::SerialBridgeNodeConfig> dynamic_param_server_;
-    //dynamic_reconfigure::Server<serial_bridge::SerialBridgeNodeConfig>::CallbackType f_;
-    
-    void SerialInit();
-    
-    void PublisherInit();
-    void SubscriberInit();
-    void ServiceInit();
-    void ClientInit();
-    void ActionInit();
-    void DynamicParamInit();
-    //void DynamicParamServer_callback(serial_bridge::SerialBridgeNodeConfig &config, uint32_t level);
+    F_LidarSlam_Point = 0x01,
+    F_VSlam_Point = 0x02,
 };
+
+/**
+ * @brief enum the data struct length of payload
+ * 
+ * @note 
+ * first character:
+ * L means data length
+ */
+enum
+{
+    L_LidarSlam_Point = 4,
+    L_VSlam_Point = 6,
+};
+
+#pragma pack(1)
+
+/**
+ * @brief Lidar-SLAM Point struct in protocol
+ * 
+ * @note 
+ * first character:
+ * p means data protocol
+ * 
+ * unit:
+ * point: cm
+ */
+struct p_LidarSlam_Point
+{
+    pVector2<int16_t> point;
+};
+
+/**
+ * @brief V-Slam Point struct in protocol
+ * 
+ * @note 
+ * first character:
+ * p means data protocol
+ * 
+ * unit:
+ * point: cm
+ */
+struct p_VSlam_Point
+{
+    pVector3<int16_t> point;
+};
+
+#pragma pack(0)

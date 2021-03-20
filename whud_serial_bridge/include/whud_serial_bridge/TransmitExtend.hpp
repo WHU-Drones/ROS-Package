@@ -1,9 +1,9 @@
 /**
- * @file ProtocolBasic.hpp
+ * @file TransmitExtend.hpp
  * @author LauZanMo (LauZanMo@whu.edu.cn)
  * @brief 
  * @version 1.0
- * @date 2021-01-03
+ * @date 2021-01-05
  * 
  * MIT License
  * 
@@ -30,75 +30,18 @@
  */
 #pragma once
 
-#include <iostream>
+#include <nav_msgs/Odometry.h>
+#include <geometry_msgs/Twist.h>
 
-#pragma pack(1)
+#include "ProtocolExtend.hpp"
+#include "TransmitBasic.hpp"
 
-/**
- * @brief header of frame
- * 
- */
-static const uint8_t packet_ID[2] = {0xAA, 0xAA};
+class TransmitExtend: public TransmitBasic
+{ 
+public:
+    TransmitExtend(std::string port_path, int baundrate);
+    ~TransmitExtend();
 
-/**
- * @brief frame struct in protocol
- * 
- * @note 
- * first character:
- * p means data protocol
- */
-struct pFrame
-{
-    uint8_t func;
-    uint8_t length;
+    void LidarSlam_Point_callback(const nav_msgs::Odometry::ConstPtr& msg);
+    void VSlam_Point_callback(const nav_msgs::Odometry::ConstPtr& msg);
 };
-
-/**
- * @brief vector2d struct in protocol
- * 
- * @tparam T 
- * 
- * @note 
- * first character:
- * p means data protocol
- */
-template <typename T>
-struct pVector2
-{
-    T x;
-    T y;
-};
-
-/**
- * @brief vector3d struct in protocol
- * 
- * @tparam T 
- * 
- * @note 
- * first character:
- * p means data protocol
- */
-template <typename T>
-struct pVector3
-{
-    T x;
-    T y;
-    T z;
-};
-
-/**
- * @brief quaternion struct in protocol
- * 
- * @note 
- * first character:
- * p means data protocol
- */
-struct pQuat
-{
-    double qx;
-    double qy;
-    double qz;
-    double qw;
-};
-
-#pragma pack(0)
