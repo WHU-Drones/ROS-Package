@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find rplidar_ros)/launch/rplidar.launch" />
+    <include file="$(find whud_laser_filter)/launch/laser_boxfilters.launch" />
+    <include file="$(find mavros)/launch/px4.launch" />
+    <include file="$(find whud_serial_bridge)/launch/whud_serial_bridge.launch" />
+</launch>

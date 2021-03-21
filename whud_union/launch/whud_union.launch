@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find whud_union)/launch/whud_communication.launch" />
+    <include file="$(find whud_slam)/launch/whud_carto_2d.launch" />
+</launch>

@@ -15,23 +15,20 @@
 -->
 
 <launch>
+
   <param name="robot_description"
-    textfile="$(find cartographer_ros)/urdf/whud_rplidar.urdf" />
+    textfile="$(find whud_slam)/urdf/whud.urdf" />
 
   <!-- 运行robot_state_publisher节点，发布tf -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 
-  <!-- 用四元数设置坐标系关系 -->
-  <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="laser_to_baselink" args="0 0 0 0 0 0 1 base_link laser" /> -->
-
-  <param name="/use_sim_time" value="true" />
+  <!-- <param name="/use_sim_time" value="true" /> -->
 
   <node name="cartographer_node" pkg="cartographer_ros"
       type="cartographer_node" args="
-          -configuration_directory $(find cartographer_ros)/configuration_files
-          -configuration_basename whud_rplidar.lua"
+          -configuration_directory $(find whud_slam)/config
+          -configuration_basename whud_carto.lua"
       output="screen">
-    <!-- <remap from="scan" to="scan" /> -->
     <remap from="odom" to="/mavros/local_position/odom" />
     <remap from="scan" to="/scan_filtered" />
     <remap from="imu" to="/mavros/imu/data" />
@@ -39,11 +36,13 @@
 
   <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
       type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
-
+  
+  <?ignore
   <node name="rviz" pkg="rviz" type="rviz" required="true"
       args="-d $(find cartographer_ros)/configuration_files/demo_2d.rviz" />
   <node name="playbag" pkg="rosbag" type="play"
       args="--clock $(arg bag_filename)" />
-
   <include file="$(find whud_laser_filter)/launch/laser_boxfilters.launch" />
+  ?>
+
 </launch>
