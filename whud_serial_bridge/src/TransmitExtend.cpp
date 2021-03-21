@@ -52,14 +52,29 @@ TransmitExtend::~TransmitExtend(){ }
  * 
  * @param msg odometry given by other nodes
  */
-void TransmitExtend::LidarSlam_Point_callback(const nav_msgs::Odometry::ConstPtr& msg)
+void TransmitExtend::LidarSlam_Point_callback(const tf::tfMessage::ConstPtr& msg)
 {
     pFrame frame;
     p_LidarSlam_Point lidar_slam_point;
     frame.func = F_LidarSlam_Point;
     frame.length = L_LidarSlam_Point;
-    lidar_slam_point.point.x = (int16_t)(msg->pose.pose.position.x * 100);
-    lidar_slam_point.point.y = (int16_t)(msg->pose.pose.position.y * 100);
+
+    tf::StampedTransform tf_transform;
+
+    try
+    {
+        tf_listener_.lookupTransform("/map", "/track_link", ros::Time(0), tf_transform);
+    }
+    catch(tf::TransformException &ex)
+    {
+        ROS_ERROR("%s", ex.what());
+    }
+
+    lidar_slam_point.point.x = (int16_t)(tf_transform.getOrigin().getX() * 100);
+    lidar_slam_point.point.y = (int16_t)(tf_transform.getOrigin().getY() * 100);
+
+    // Show the tf data
+    // ROS_INFO("x:%d, y:%d", lidar_slam_point.point.x, lidar_slam_point.point.y);
 
     SendData<p_LidarSlam_Point>(&frame, &lidar_slam_point);
 }

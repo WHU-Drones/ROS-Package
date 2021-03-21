@@ -32,7 +32,6 @@
 
 #include <iostream>
 #include <ros/ros.h>
-#include <serial/serial.h>
 //#include <dynamic_reconfigure/server.h>
 
 //#include "SerialBridgeNodeConfig.h"

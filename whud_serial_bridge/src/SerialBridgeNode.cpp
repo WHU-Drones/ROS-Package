@@ -32,6 +32,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Point.h>
 #include <nav_msgs/Odometry.h>
+#include <tf/tfMessage.h>
 
 #include "SerialBridgeNode.hpp"
 
@@ -113,7 +114,7 @@ void SerialBridgeNode::PublisherInit() { }
  * 
  */
 void SerialBridgeNode::SubscriberInit() {
-    lidar_slam_point_subscriber_ = nh_.subscribe<nav_msgs::Odometry>(lidar_slam_point_topic_, 1,
+    lidar_slam_point_subscriber_ = nh_.subscribe<tf::tfMessage>(lidar_slam_point_topic_, 1,
                             &TransmitExtend::LidarSlam_Point_callback, this->serial_bridge_);
     vslam_point_subscriber_ = nh_.subscribe<nav_msgs::Odometry>(vslam_point_topic_, 1,
                             &TransmitExtend::VSlam_Point_callback, this->serial_bridge_);

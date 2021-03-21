@@ -32,6 +32,8 @@
 
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Twist.h>
+#include <tf/tfMessage.h>
+#include <tf/transform_listener.h>
 
 #include "ProtocolExtend.hpp"
 #include "TransmitBasic.hpp"
@@ -42,6 +44,8 @@ public:
     TransmitExtend(std::string port_path, int baundrate);
     ~TransmitExtend();
 
-    void LidarSlam_Point_callback(const nav_msgs::Odometry::ConstPtr& msg);
+    void LidarSlam_Point_callback(const tf::tfMessage::ConstPtr& msg);
     void VSlam_Point_callback(const nav_msgs::Odometry::ConstPtr& msg);
+private:
+    tf::TransformListener tf_listener_;
 };
