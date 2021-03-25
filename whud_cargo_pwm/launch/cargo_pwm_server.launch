@@ -1,0 +1,6 @@
+<launch>
+    <include file="$(find test_node)/launch/test_server.launch" />
+    <node pkg="whud_cargo_pwm" type="cargo_pwm_server.py" name="cargo_pwm_node">
+        
+    </node>
+</launch>
