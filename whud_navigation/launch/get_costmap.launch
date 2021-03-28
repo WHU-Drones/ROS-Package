@@ -2,11 +2,18 @@
     <!-- <param name="/use_sim_time" value="true" /> -->
 
     <param name="robot_description"
-        textfile="$(find whud_slam)/urdf/whud.urdf" />
+        textfile="$(find whud_slam)/configwhud.urdf" />
 
     <!-- 运行robot_state_publisher节点，发布tf -->
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" /> 
+    <node name="cartographer_node" pkg="cartographer_ros"
+        type="cartographer_node" args="
+            -configuration_directory $(find whud_slam)/config
+            -configuration_basename whud_carto.lua"
+        output="screen">
+        <remap from="odom" to="/mavros/local_position/odom" />
+        <remap from="scan" to="/scan_filtered" />
+        <remap from="imu" to="/mavros/imu/data" />
+    </node>
 
     <node name="cartographer_node" pkg="cartographer_ros"
         type="cartographer_node" args="
