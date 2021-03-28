@@ -34,7 +34,7 @@
           -configuration_basename whud_carto.lua"
       output="screen">
     <remap from="odom" to="/mavros/local_position/odom" />
-    <!-- <remap from="scan" to="/scan_filtered" /> -->
+    <remap from="scan" to="/scan_filtered" />
     <remap from="imu" to="/mavros/imu/data" />
   </node>
 
