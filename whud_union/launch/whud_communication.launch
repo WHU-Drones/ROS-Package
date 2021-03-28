@@ -3,5 +3,5 @@
 	<include file="$(find whud_union)/launch/whud_mavros.launch" />
     <include file="$(find rplidar_ros)/launch/rplidar.launch" />
     <include file="$(find whud_laser_filter)/launch/laser_boxfilters.launch" />
-    <include file="$(find whud_serial_bridge)/launch/whud_serial_bridge.launch" />
+    <!-- <include file="$(find whud_serial_bridge)/launch/whud_serial_bridge.launch" /> -->
 </launch>
