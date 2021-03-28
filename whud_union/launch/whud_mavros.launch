@@ -9,8 +9,8 @@
 	<arg name="respawn_mavros" default="false" />
 
 	<include file="$(find mavros)/launch/node.launch">
-		<arg name="pluginlists_yaml" value="$(find whud_mavros)/config/whud_pluginlists.yaml" />
-		<arg name="config_yaml" value="$(find whud_mavros)/config/whud_config.yaml" />
+		<arg name="pluginlists_yaml" value="$(find whud_union)/config/whud_pluginlist.yaml" />
+		<arg name="config_yaml" value="$(find whud_union)/config/whud_config.yaml" />
 
 		<arg name="fcu_url" value="$(arg fcu_url)" />
 		<arg name="gcs_url" value="$(arg gcs_url)" />
