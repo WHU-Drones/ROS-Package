@@ -2,6 +2,8 @@
 #include <mavros/mavros_plugin.h>
 #include <tf/tfMessage.h>
 #include <tf/transform_listener.h>
+#include <std_msgs/Float64.h>
+#include <std_msgs/Bool.h>
 namespace mavros {
 namespace std_plugins {
 /**
@@ -16,6 +18,9 @@ class WhudPlugin : public plugin::PluginBase {
 
     cmd_vel_sub = mav_control_nh.subscribe("cmd_vel", 1, &WhudPlugin::cmd_vel_cb, this);
     tf_sub = mav_control_nh.subscribe("/tf", 1, &WhudPlugin::tf_cb, this);
+    takeoff_sub = mav_control_nh.subscribe("/takeoff_height", 1, &WhudPlugin::takeoff_cb, this);
+    land_sub = mav_control_nh.subscribe("/land", 1, &WhudPlugin::land_cb, this);
+    height_control_sub = mav_control_nh.subscribe("/height_control", 1, &WhudPlugin::height_control_cb, this);
   }
 
   	Subscriptions get_subscriptions() override
@@ -28,6 +33,9 @@ class WhudPlugin : public plugin::PluginBase {
 
   ros::Subscriber cmd_vel_sub;
   ros::Subscriber tf_sub;
+  ros::Subscriber takeoff_sub;
+  ros::Subscriber land_sub;
+  ros::Subscriber height_control_sub;
 
   tf::TransformListener tf_listener_;
 
@@ -37,11 +45,13 @@ class WhudPlugin : public plugin::PluginBase {
   {
     mavlink::common::msg::COMMAND_LONG msg;
     
-    msg.command = 31010;//MAV_CMD_USER_1
+    msg.command = 31010;// MAV_CMD_USER_1
     msg.param1 = req->linear.x;
     msg.param2 = req->linear.y;
     msg.param3 = req->linear.z;
     msg.param4 = req->angular.z;
+    msg.param5 = 0.26;// maxRoll
+    msg.param6 = 0.26;// maxPitch
 
     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
   }
@@ -67,6 +77,32 @@ class WhudPlugin : public plugin::PluginBase {
     msg.x = tf_transform.getOrigin().getX();
     msg.y = tf_transform.getOrigin().getY();
     msg.z = tf_transform.getOrigin().getZ();
+
+    UAS_FCU(m_uas)->send_message_ignore_drop(msg);
+  }
+
+  void takeoff_cb(const std_msgs::Float64::ConstPtr &height)
+  {
+    mavlink::common::msg::COMMAND_LONG msg;
+    msg.command = 22;
+    msg.param7 = height->data;
+
+    UAS_FCU(m_uas)->send_message_ignore_drop(msg);
+  }
+
+  void land_cb(const std_msgs::Bool::ConstPtr &land)
+  {
+    mavlink::common::msg::COMMAND_LONG msg;
+    msg.command = 21;
+    UAS_FCU(m_uas)->send_message_ignore_drop(msg);
+  }
+
+  void height_control_cb(const std_msgs::Float64::ConstPtr &height)
+  {
+    mavlink::common::msg::COMMAND_LONG msg;
+    
+    msg.command = 31011;// MAV_CMD_USER_2
+    msg.param1 = height->data;
 
     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
   }
