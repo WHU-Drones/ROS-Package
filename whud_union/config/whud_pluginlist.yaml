@@ -48,10 +48,11 @@ plugin_blacklist:
 - waypoint
 - wheel_odometry
 - wind_estimation
-
+#- whud
 
 plugin_whitelist:
 #- 'sys_*'
 - imu
 - mocap_pose_estimate
 - vision_speed_estimate
+- whud
