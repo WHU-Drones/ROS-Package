@@ -4,6 +4,8 @@
     <param name="robot_description"
         textfile="$(find whud_slam)/config/whud.urdf" />
 
+    <arg name="move_forward_only" value="false" />
+
     <!-- 运行robot_state_publisher节点，发布tf -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
       <param name="tf_prefix" value="" />
@@ -27,15 +29,6 @@
 
 
     <!-- 运行move_base节点 -->
-    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
-        <rosparam file="$(find whud_navigation)/config/whud_robot/costmap_common_params.yaml" command="load" ns="global_costmap" />
-        <rosparam file="$(find whud_navigation)/config/whud_robot/costmap_common_params.yaml" command="load" ns="local_costmap" />
-        <rosparam file="$(find whud_navigation)/config/whud_robot/local_costmap_params.yaml" command="load" />
-        <rosparam file="$(find whud_navigation)/config/whud_robot/global_costmap_params.yaml" command="load" />
-        <rosparam file="$(find whud_navigation)/config/whud_robot/base_local_planner_params.yaml" command="load" />
-
-        <remap from="/cmd_vel" to="/mavros/whud/cmd_vel" />
-    </node>
 
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
         <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
