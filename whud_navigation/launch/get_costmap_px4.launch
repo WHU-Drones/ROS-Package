@@ -1,0 +1,61 @@
+<launch>
+    <!-- <param name="/use_sim_time" value="true" /> -->
+
+    <param name="robot_description"
+        textfile="$(find whud_slam)/config/whud.urdf" />
+
+    <!-- 运行robot_state_publisher节点，发布tf -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+      <param name="tf_prefix" value="" />
+      <param name="use_tf_static" value="false" />
+      <param name="publish_frequency" value="8" />
+  </node>
+
+  <!-- <param name="/use_sim_time" value="true" /> -->
+
+  <node name="cartographer_node" pkg="cartographer_ros"
+      type="cartographer_node" args="
+          -configuration_directory $(find whud_slam)/config
+          -configuration_basename whud_carto.lua"
+      output="screen">
+    <remap from="scan" to="/scan_filtered" />
+    <remap from="imu" to="/mavros/imu/data" />
+  </node>
+
+    <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
+        type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
+
+
+    <!-- 运行move_base节点 -->
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
+        <rosparam file="$(find whud_navigation)/config/whud_robot/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot/base_local_planner_params.yaml" command="load" />
+
+        <remap from="/cmd_vel" to="/mavros/whud/cmd_vel" />
+    </node>
+
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot_px4/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot_px4/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot_px4/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot_px4/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot_px4/move_base_params.yaml" command="load" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot_px4/dwa_local_planner_params.yaml" command="load" />
+
+        <remap from="/cmd_vel" to="/mavros/whud/cmd_vel" />
+        <param name="DWAPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
+    </node>
+
+    <!-- 运行rviz -->
+    <?ignore
+    <node name="playbag" pkg="rosbag" type="play"
+        args="--clock $(arg bag_filename)" />
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find whud_navigation)/rviz/nav.rviz"/>
+    <include file="$(find whud_laser_filter)/launch/laser_boxfilters.launch" />
+    ?>
+
+</launch>
