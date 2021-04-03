@@ -1,0 +1,21 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/cjp/px4/volans/devel/include/**",
+        "/home/cjp/Code/cartographer_ws/install_isolated/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/cjp/px4/volans/src/modules/px4_control/include/**",
+        "/home/cjp/px4/volans/src/simulation/include/**",
+        "/home/cjp/Code/catkin_ws/src/whud_serial_bridge/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}

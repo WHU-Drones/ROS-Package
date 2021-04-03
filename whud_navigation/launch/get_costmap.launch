@@ -2,27 +2,27 @@
     <!-- <param name="/use_sim_time" value="true" /> -->
 
     <param name="robot_description"
-        textfile="$(find whud_slam)/configwhud.urdf" />
+        textfile="$(find whud_slam)/config/whud.urdf" />
 
     <!-- 运行robot_state_publisher节点，发布tf -->
-    <node name="cartographer_node" pkg="cartographer_ros"
-        type="cartographer_node" args="
-            -configuration_directory $(find whud_slam)/config
-            -configuration_basename whud_carto.lua"
-        output="screen">
-        <remap from="odom" to="/mavros/local_position/odom" />
-        <remap from="scan" to="/scan_filtered" />
-        <remap from="imu" to="/mavros/imu/data" />
-    </node>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+      <param name="tf_prefix" value="" />
+      <param name="use_tf_static" value="false" />
+      <param name="publish_frequency" value="8" />
+  </node>
 
-    <node name="cartographer_node" pkg="cartographer_ros"
-        type="cartographer_node" args="
-            -configuration_directory $(find whud_slam)/config
-            -configuration_basename whud_carto.lua"
-        output="screen">
-        <remap from="imu" to="/mavros/imu/data" />
-        <remap from="scan" to="/scan_filtered" />
-    </node>
+  <!-- <param name="/use_sim_time" value="true" /> -->
+
+  <node name="cartographer_node" pkg="cartographer_ros"
+      type="cartographer_node" args="
+          -configuration_directory $(find whud_slam)/config
+          -configuration_basename whud_carto.lua"
+      output="screen">
+    <remap from="scan" to="/scan_filtered" />
+    <remap from="imu" to="/mavros/imu/data" />
+  </node>
+
+  
 
     <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
         type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
@@ -35,6 +35,8 @@
         <rosparam file="$(find whud_navigation)/config/whud_robot/local_costmap_params.yaml" command="load" />
         <rosparam file="$(find whud_navigation)/config/whud_robot/global_costmap_params.yaml" command="load" />
         <rosparam file="$(find whud_navigation)/config/whud_robot/base_local_planner_params.yaml" command="load" />
+
+        <remap from="/cmd_vel" to="/mavros/whud/cmd_vel" />
     </node>
 
     <!-- 运行rviz -->
