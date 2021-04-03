@@ -23,8 +23,8 @@ class WhudPlugin : public plugin::PluginBase {
     takeoff_sub = mav_control_nh.subscribe("/takeoff_height", 1, &WhudPlugin::takeoff_cb, this);
     land_sub = mav_control_nh.subscribe("/land", 1, &WhudPlugin::land_cb, this);
     height_control_sub = mav_control_nh.subscribe("/height_control", 1, &WhudPlugin::height_control_cb, this);
-    vision_pose_sub = nav_control_nh.subscribe("/vision", 1, &WhudPlugin::vision_pose_cb, this);
-    vision_speed_sub = nav_control_nh.subscribe("/vision", 1, &WhudPlugin::vision_speed_cb, this);
+    vision_pose_sub = mav_control_nh.subscribe("/vision", 1, &WhudPlugin::vision_pose_cb, this);
+    vision_speed_sub = mav_control_nh.subscribe("/vision", 1, &WhudPlugin::vision_speed_cb, this);
   }
 
   	Subscriptions get_subscriptions() override
