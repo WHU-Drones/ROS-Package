@@ -4,6 +4,8 @@
 #include <tf/transform_listener.h>
 #include <std_msgs/Float64.h>
 #include <std_msgs/Bool.h>
+#include <nav_msgs/Odometry.h>
+
 namespace mavros {
 namespace std_plugins {
 /**
@@ -21,6 +23,8 @@ class WhudPlugin : public plugin::PluginBase {
     takeoff_sub = mav_control_nh.subscribe("/takeoff_height", 1, &WhudPlugin::takeoff_cb, this);
     land_sub = mav_control_nh.subscribe("/land", 1, &WhudPlugin::land_cb, this);
     height_control_sub = mav_control_nh.subscribe("/height_control", 1, &WhudPlugin::height_control_cb, this);
+    vision_pose_sub = nav_control_nh.subscribe("/vision", 1, &WhudPlugin::vision_pose_cb, this);
+    vision_speed_sub = nav_control_nh.subscribe("/vision", 1, &WhudPlugin::vision_speed_cb, this);
   }
 
   	Subscriptions get_subscriptions() override
@@ -36,6 +40,8 @@ class WhudPlugin : public plugin::PluginBase {
   ros::Subscriber takeoff_sub;
   ros::Subscriber land_sub;
   ros::Subscriber height_control_sub;
+  ros::Subscriber vision_pose_sub;
+  ros::Subscriber vision_speed_sub;
 
   tf::TransformListener tf_listener_;
 
@@ -106,6 +112,27 @@ class WhudPlugin : public plugin::PluginBase {
 
     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
   }
+
+  void vision_pose_cb(const nav_msgs::Odometry::ConstPtr &odom)
+  {
+    mavlink::common::msg::VISION_POSITION_ESTIMATE msg;
+    msg.x = odom->pose.pose.position.x;
+    msg.y = odom->pose.pose.position.y;
+    msg.z = odom->pose.pose.position.z;
+    
+    UAS_FCU(m_uas)->send_message_ignore_drop(msg);
+  }
+
+  void vision_speed_cb(const nav_msgs::Odometry::ConstPtr &odom)
+  {
+    mavlink::common::msg::VISION_SPEED_ESTIMATE msg;
+    msg.x = odom->twist.twist.linear.x;
+    msg.y = odom->twist.twist.linear.y;
+    msg.z = odom->twist.twist.linear.z;
+
+    UAS_FCU(m_uas)->send_message_ignore_drop(msg);
+  }
+
 };
 }  // namespace std_plugins
 }  // namespace mavros
