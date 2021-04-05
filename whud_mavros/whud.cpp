@@ -56,8 +56,8 @@ class WhudPlugin : public plugin::PluginBase {
     msg.param2 = req->linear.y;
     msg.param3 = req->linear.z;
     msg.param4 = req->angular.z;
-    msg.param5 = 0.26;// maxRoll
-    msg.param6 = 0.26;// maxPitch
+    msg.param5 = 0.5;// maxRoll
+    msg.param6 = 0.5;// maxPitch
 
     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
   }
@@ -73,7 +73,7 @@ class WhudPlugin : public plugin::PluginBase {
     }
     catch(tf::TransformException &ex)
     {
-        ROS_ERROR("%s", ex.what());
+        ROS_WARN("%s", ex.what());
     }
 
     msg.q[0] = tf_transform.getRotation().getW();
