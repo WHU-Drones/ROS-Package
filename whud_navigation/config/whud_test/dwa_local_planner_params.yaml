@@ -1,7 +1,7 @@
 # 网址：http://wiki.ros.org/dwa_local_planner
 DWAPlannerROS:
-    acc_lim_x: 0.6
-    acc_lim_y: 0.6
+    acc_lim_x: 1.2
+    acc_lim_y: 1.2
     acc_lim_th: 0.5
     max_vel_trans: 0.3 # absolute value
     min_vel_trans: 0 # absolute value
