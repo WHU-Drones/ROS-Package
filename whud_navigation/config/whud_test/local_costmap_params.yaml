@@ -1,3 +1,4 @@
+# 网址：http://wiki.ros.org/costmap_2d
 local_costmap:
    global_frame: odom
    robot_base_frame: track_link
