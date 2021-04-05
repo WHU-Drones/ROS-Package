@@ -1,3 +1,4 @@
+# 网址：http://wiki.ros.org/costmap_2d/hydro/staticmap
 obstacle_range: 5.0
 raytrace_range: 5.0
 # robot_radius: 0.45
@@ -10,7 +11,6 @@ scan: {data_type: LaserScan, topic: /scan_filtered, marking: true, clearing: tru
 trinary_costmap: true
 lethal_cost_threshold: 51
 
-# 默认参数，具体见 staticmap 介绍 http://wiki.ros.org/costmap_2d/hydro/staticmap
 # unknown_cost_value: -1
 # map_topic: "map"
 # first_map_only: false
