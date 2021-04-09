@@ -1,7 +1,7 @@
 # 网址：http://wiki.ros.org/costmap_2d
 global_costmap:
    global_frame: map
-   robot_base_frame: track_link
+   robot_base_frame: nav_link
    update_frequency: 5.0
    publish_frequency: 5.0
    static_map: true
