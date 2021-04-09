@@ -39,7 +39,7 @@
   <joint name="nav_joint" type="fixed">
     <parent link="track_link" />
     <child link="nav_link" />
-    <origin xyz="-0.07 0 0" rpy="0 0 0" />
+    <origin xyz="-0.08 0 0" rpy="0 0 0" />
   </joint>
 
 
