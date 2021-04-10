@@ -7,7 +7,7 @@ from geometry_msgs.msg import Twist
 
 class WAIT(WHUState.State):
     def __init__(self):
-        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_num_trans = 1)
+        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_input_keys = [], w_output_keys = [], w_num_trans = 1)
 		self.refresh()
 		self.c_got = self.w_got							# A list idicates whether getting msg from topic.
 		self.c_data_sub = self.w_data_sub		# A list includes the data subscribed from topic.
@@ -35,7 +35,7 @@ class WAIT(WHUState.State):
 
 class FLAY_TO_A(WHUState.State):
     def __init__(self):
-        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_num_trans = 1)
+        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_input_keys = [], w_output_keys = [], w_num_trans = 1)
 		self.refresh()
 		self.c_got = self.w_got							# A list idicates whether getting msg from topic.
 		self.c_data_sub = self.w_data_sub		# A list includes the data subscribed from topic.
@@ -63,7 +63,7 @@ class FLAY_TO_A(WHUState.State):
 
 class DROP(WHUState.State):
     def __init__(self):
-        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_num_trans = 3)
+        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_input_keys = [], w_output_keys = [], w_num_trans = 3)
 		self.refresh()
 		self.c_got = self.w_got							# A list idicates whether getting msg from topic.
 		self.c_data_sub = self.w_data_sub		# A list includes the data subscribed from topic.
@@ -99,7 +99,7 @@ class DROP(WHUState.State):
 
 class FLAY_ABOVE_BD(WHUState.State):
     def __init__(self):
-        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'],  w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_num_trans = 1)
+        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'],  w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_input_keys = [], w_output_keys = [], w_num_trans = 1)
 		self.refresh()
 		self.c_got = self.w_got							# A list idicates whether getting msg from topic.
 		self.c_data_sub = self.w_data_sub		# A list includes the data subscribed from topic.
@@ -127,7 +127,7 @@ class FLAY_ABOVE_BD(WHUState.State):
 
 class FLAY_TO_B(WHUState.State):
     def __init__(self):
-        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_num_trans = 1)
+        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_input_keys = [], w_output_keys = [], w_num_trans = 1)
 		self.refresh()
 		self.c_got = self.w_got							# A list idicates whether getting msg from topic.
 		self.c_data_sub = self.w_data_sub		# A list includes the data subscribed from topic.
@@ -155,7 +155,7 @@ class FLAY_TO_B(WHUState.State):
 
 class FLAY_ABOVE_L(WHUState.State):
     def __init__(self):
-        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_num_trans = 1)
+        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_input_keys = [], w_output_keys = [], w_num_trans = 1)
 		self.refresh()
 		self.c_got = self.w_got							# A list idicates whether getting msg from topic.
 		self.c_data_sub = self.w_data_sub		# A list includes the data subscribed from topic.
@@ -183,7 +183,7 @@ class FLAY_ABOVE_L(WHUState.State):
 
 class FLAY_TO_C(WHUState.State):
     def __init__(self):
-        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_num_trans = 1)
+        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_input_keys = [], w_output_keys = [], w_num_trans = 1)
 		self.refresh()
 		self.c_got = self.w_got							# A list idicates whether getting msg from topic.
 		self.c_data_sub = self.w_data_sub		# A list includes the data subscribed from topic.
@@ -211,7 +211,7 @@ class FLAY_TO_C(WHUState.State):
 
 class FLAY_BACK(WHUState.State):
     def __init__(self):
-        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_num_trans = 1)
+        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_input_keys = [], w_output_keys = [], w_num_trans = 1)
 		self.refresh()
 		self.c_got = self.w_got							# A list idicates whether getting msg from topic.
 		self.c_data_sub = self.w_data_sub		# A list includes the data subscribed from topic.
@@ -239,7 +239,7 @@ class FLAY_BACK(WHUState.State):
 
 class LAND(WHUState.State):
     def __init__(self):
-        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_num_trans = 1)
+        WHUState.State.__init__(self, w_name_topic_in = ['/TOPIC_IN'], w_name_type_in = [Twist], w_name_topic_out = [], w_name_type_out = [], w_num_serve_in = 0, w_num_action_in = 0, w_num_serve_out = 0, w_num_action_out = 0, w_size_topic_out = [1000], w_input_keys = [], w_output_keys = [], w_num_trans = 1)
 		self.refresh()
 		self.c_got = self.w_got							# A list idicates whether getting msg from topic.
 		self.c_data_sub = self.w_data_sub		# A list includes the data subscribed from topic.

@@ -14,6 +14,7 @@ class State(smach.State):
                 w_num_serve_in,   w_num_action_in,
                 w_num_serve_out,  w_num_action_out,
                 w_size_topic_out,
+                w_input_keys, w_output_keys,
                 w_num_trans ):
 
     w_num_topic_in = len(w_name_topic_in)
@@ -69,8 +70,8 @@ class State(smach.State):
     w_input_name_list = w_topic_input_name_list + w_serve_input_name_list + w_action_input_name_list
     smach.State.__init__( self,
                           outcomes = w_trans_name_list + ['outcome_self'],
-                          input_keys = w_input_name_list,
-                          output_keys = w_output_name_list  )
+                          input_keys = w_input_keys,
+                          output_keys = w_output_keys  )
 
   def callback(self, data, args):
     #for i in range(1, len(self.w_data_sub) + 1):
