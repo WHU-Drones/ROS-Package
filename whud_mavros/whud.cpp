@@ -90,7 +90,7 @@ class WhudPlugin : public plugin::PluginBase {
   void takeoff_cb(const std_msgs::Float64::ConstPtr &height)
   {
     mavlink::common::msg::COMMAND_LONG msg;
-    msg.command = 22;
+    msg.command = 24;
     msg.param7 = height->data;
 
     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
