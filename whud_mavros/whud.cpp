@@ -18,7 +18,7 @@ class WhudPlugin : public plugin::PluginBase {
   void initialize(UAS &uas_) override {
     PluginBase::initialize(uas_);
 
-    cmd_vel_sub = mav_control_nh.subscribe("cmd_vel", 1, &WhudPlugin::cmd_vel_cb, this);
+    cmd_vel_sub = mav_control_nh.subscribe("/mavros/whud/cmd_vel", 1, &WhudPlugin::cmd_vel_cb, this);
     tf_sub = mav_control_nh.subscribe("/tf", 1, &WhudPlugin::tf_cb, this);
     takeoff_sub = mav_control_nh.subscribe("/takeoff_height", 1, &WhudPlugin::takeoff_cb, this);
     land_sub = mav_control_nh.subscribe("/land", 1, &WhudPlugin::land_cb, this);
