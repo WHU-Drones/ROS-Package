@@ -99,7 +99,7 @@ class WhudPlugin : public plugin::PluginBase {
   void land_cb(const std_msgs::Bool::ConstPtr &land)
   {
     mavlink::common::msg::COMMAND_LONG msg;
-    msg.command = 21;
+    msg.command = 23;
     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
   }
 
