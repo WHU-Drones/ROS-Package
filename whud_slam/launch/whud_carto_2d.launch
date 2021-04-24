@@ -46,9 +46,6 @@
       args="-d $(find cartographer_ros)/configuration_files/demo_2d.rviz" />
   <node name="playbag" pkg="rosbag" type="play"
       args="--clock $(arg bag_filename)" />
-  <node name="playbag" pkg="rosbag" type="play"
-      args="--clock $(arg bag_filename)" />
-  <include file="$(find whud_laser_filter)/launch/laser_boxfilters.launch" />
   ?>
 
 </launch>

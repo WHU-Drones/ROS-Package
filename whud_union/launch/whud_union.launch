@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
     <include file="$(find whud_union)/launch/whud_communication.launch" />
-    <!-- <include file="$(find whud_slam)/launch/whud_carto_2d.launch" /> -->
-    <include file="$(find whud_navigation)/launch/get_costmap_test.launch" />
+    <include file="$(find whud_slam)/launch/whud_carto_2d.launch" />
+    <include file="$(find whud_navigation)/launch/whud_navigation.launch" />
 </launch>
