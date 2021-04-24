@@ -23,8 +23,7 @@ class WhudPlugin : public plugin::PluginBase {
     takeoff_sub = mav_control_nh.subscribe("/takeoff_height", 1, &WhudPlugin::takeoff_cb, this);
     land_sub = mav_control_nh.subscribe("/land", 1, &WhudPlugin::land_cb, this);
     height_control_sub = mav_control_nh.subscribe("/height_control", 1, &WhudPlugin::height_control_cb, this);
-    vision_pose_sub = mav_control_nh.subscribe("/vision", 1, &WhudPlugin::vision_pose_cb, this);
-    vision_speed_sub = mav_control_nh.subscribe("/vision", 1, &WhudPlugin::vision_speed_cb, this);
+    yaw_sub = mav_control_nh.subscribe("/yaw", 1, &WhudPlugin::yaw_cb, this);
   }
 
   	Subscriptions get_subscriptions() override
@@ -40,14 +39,13 @@ class WhudPlugin : public plugin::PluginBase {
   ros::Subscriber takeoff_sub;
   ros::Subscriber land_sub;
   ros::Subscriber height_control_sub;
-  ros::Subscriber vision_pose_sub;
-  ros::Subscriber vision_speed_sub;
+  ros::Subscriber yaw_sub;
 
   tf::TransformListener tf_listener_;
 
   /* -*- callbacks -*- */
 
-  void cmd_vel_cb(const geometry_msgs::Twist::ConstPtr req)
+  void cmd_vel_cb(const geometry_msgs::Twist::ConstPtr &req)
   {
     mavlink::common::msg::COMMAND_LONG msg;
     
@@ -90,7 +88,7 @@ class WhudPlugin : public plugin::PluginBase {
   void takeoff_cb(const std_msgs::Float64::ConstPtr &height)
   {
     mavlink::common::msg::COMMAND_LONG msg;
-    msg.command = 24;
+    msg.command = 24;// MAV_CMD_NAV_TAKEOFF_LOCAL
     msg.param7 = height->data;
 
     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
@@ -99,7 +97,7 @@ class WhudPlugin : public plugin::PluginBase {
   void land_cb(const std_msgs::Bool::ConstPtr &land)
   {
     mavlink::common::msg::COMMAND_LONG msg;
-    msg.command = 23;
+    msg.command = 23;// MAV_CMD_NAV_LAND_LOCAL
     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
   }
 
@@ -107,28 +105,19 @@ class WhudPlugin : public plugin::PluginBase {
   {
     mavlink::common::msg::COMMAND_LONG msg;
     
-    msg.command = 31011;// MAV_CMD_USER_2
-    msg.param1 = height->data;
+    msg.command = 113;// MAV_CMD_CONDITION_CHANGE_ALT
+    msg.param6 = height->data;
 
     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
   }
 
-  void vision_pose_cb(const nav_msgs::Odometry::ConstPtr &odom)
+  void yaw_cb(const std_msgs::Float64::ConstPtr &yaw)
   {
-    mavlink::common::msg::VISION_POSITION_ESTIMATE msg;
-    msg.x = odom->pose.pose.position.x;
-    msg.y = odom->pose.pose.position.y;
-    msg.z = odom->pose.pose.position.z;
+    mavlink::common::msg::COMMAND_LONG msg;
     
-    UAS_FCU(m_uas)->send_message_ignore_drop(msg);
-  }
-
-  void vision_speed_cb(const nav_msgs::Odometry::ConstPtr &odom)
-  {
-    mavlink::common::msg::VISION_SPEED_ESTIMATE msg;
-    msg.x = odom->twist.twist.linear.x;
-    msg.y = odom->twist.twist.linear.y;
-    msg.z = odom->twist.twist.linear.z;
+    msg.command = 115;// MAV_CMD_CONDITION_YAW
+    msg.param1 = yaw->data;
+    msg.param4 = 1;// relative offset
 
     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
   }
