@@ -4,7 +4,7 @@
 #include <tf/transform_listener.h>
 #include <std_msgs/Float64.h>
 #include <std_msgs/Float64MultiArray.h>
-#include <std_msgs/Bool.h>
+#include <std_msgs/Int32.h>
 #include <nav_msgs/Odometry.h>
 
 namespace mavros {
@@ -27,11 +27,15 @@ class WhudPlugin : public plugin::PluginBase {
     yaw_sub = mav_control_nh.subscribe("/yaw", 1, &WhudPlugin::yaw_cb, this);
     vision_pose_sub = mav_control_nh.subscribe("/vision", 1, &WhudPlugin::vision_pose_cb, this);
     vision_speed_sub = mav_control_nh.subscribe("/vision", 1, &WhudPlugin::vision_speed_cb, this);
+    
+    progress_pub = mav_control_nh.advertise<std_msgs::Int32>("/progress", 1);
   }
 
   	Subscriptions get_subscriptions() override
 	{
-		return { /* Rx disabled */ };
+		return {
+              make_handler(&WhudPlugin::handle_progress),
+    };
 	}
 
  private:
@@ -45,6 +49,8 @@ class WhudPlugin : public plugin::PluginBase {
   ros::Subscriber yaw_sub;
   ros::Subscriber vision_pose_sub;
   ros::Subscriber vision_speed_sub;
+
+  ros::Publisher progress_pub;
 
   tf::TransformListener tf_listener_;
 
@@ -161,6 +167,12 @@ class WhudPlugin : public plugin::PluginBase {
     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
   }
 
+  void handle_progress(const mavlink::mavlink_message_t *msg, mavlink::common::msg::COMMAND_ACK &progress_msg)
+  {
+    auto progress = boost::make_shared<std_msgs::Int32>();
+    progress->data = progress_msg.progress;
+    progress_pub.publish(progress);
+  }
 };
 }  // namespace std_plugins
 }  // namespace mavros
