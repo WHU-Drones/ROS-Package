@@ -69,6 +69,7 @@ class WhudPlugin : public plugin::PluginBase {
     msg.param5 = 0.5;
     // maxPitch
     msg.param6 = 0.5;
+    msg.param7 = 0;
 
     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
   }
@@ -170,7 +171,7 @@ class WhudPlugin : public plugin::PluginBase {
   void handle_progress(const mavlink::mavlink_message_t *msg, mavlink::common::msg::COMMAND_ACK &progress_msg)
   {
     auto progress = boost::make_shared<std_msgs::Int32>();
-    progress->data = progress_msg.progress;
+    progress->data = progress_msg.result;
     progress_pub.publish(progress);
   }
 };
