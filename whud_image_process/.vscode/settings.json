@@ -1,0 +1,11 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/nvidia/Code/distance_ws/devel/lib/python2.7/dist-packages",
+        "/home/nvidia/Code/cartographer_ws/install_isolated/lib/python2.7/dist-packages",
+        "/home/nvidia/Code/mavlink_ws/devel/lib/python2.7/dist-packages",
+        "/home/nvidia/Code/orbslam_ws/devel/lib/python2.7/dist-packages",
+        "/home/nvidia/Code/catkin_ws/devel/lib/python2.7/dist-packages",
+        "/opt/ros/melodic/lib/python2.7/dist-packages",
+        "/usr/local/lib"
+    ]
+}

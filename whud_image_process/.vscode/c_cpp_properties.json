@@ -1,0 +1,33 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/nvidia/Code/distance_ws/devel/include/**",
+        "/home/nvidia/Code/cartographer_ws/install_isolated/include/**",
+        "/home/nvidia/Code/mavlink_ws/devel/include/**",
+        "/home/nvidia/Code/orbslam_ws/devel/include/**",
+        "/home/nvidia/Code/catkin_ws/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/nvidia/Code/distance_ws/src/GetDistance/include/**",
+        "/home/nvidia/Code/catkin_ws/src/darknet_ros/darknet_ros/include/**",
+        "/home/nvidia/Code/catkin_ws/src/find-object-master/include/**",
+        "/home/nvidia/Code/mavlink_ws/src/mavros/libmavconn/include/**",
+        "/home/nvidia/Code/mavlink_ws/src/mavros/mavros/include/**",
+        "/home/nvidia/Code/mavlink_ws/src/mavros/mavros_msgs/include/**",
+        "/home/nvidia/Code/catkin_ws/src/my_laser_filter/include/**",
+        "/home/nvidia/Code/catkin_ws/src/realsense-ros/realsense2_camera/include/**",
+        "/home/nvidia/Code/catkin_ws/src/serial_bridge/include/**",
+        "/home/nvidia/Code/mavlink_ws/src/mavros/test_mavros/include/**",
+        "/home/nvidia/Code/catkin_ws/src/usb_cam/include/**",
+        "/home/nvidia/Code/catkin_ws/src/whud_serial_bridge/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}

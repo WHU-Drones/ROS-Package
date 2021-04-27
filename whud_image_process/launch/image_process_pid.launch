@@ -1,0 +1,49 @@
+<launch>
+
+<node name="controller" pkg="pid" type="controller" ns="x_speed" output="screen" >
+      <param name="node_name_x" value="x_controller" />
+      <param name="Kp" value="5.0" />
+      <param name="Ki" value="0.0" />
+      <param name="Kd" value="0.0" />
+      <param name="upper_limit" value="3000" />
+      <param name="lower_limit" value="-3000" />
+      <!-- <param name="windup_limit" value="10" /> -->
+      <param name="max_loop_frequency" value="30.0" />
+      <param name="min_loop_frequency" value="10.0" />
+      <remap from="state" to="/x_state" />
+      <remap from="setpoint" to="/x_setpoint" />
+     </node>
+
+    <!-- <node name="servo_sim_node" pkg="pid" type="plant_sim" ns="x_speed" output="screen" >
+      <param name="plant_order" value="2" />
+    </node> -->
+
+    <node name="controller" pkg="pid" type="controller" ns="y_speed" output="screen" >
+      <param name="node_name_y" value="y_controller" />
+      <param name="Kp" value="-4.0" />
+      <param name="Ki" value="-0.0" />
+      <param name="Kd" value="0.0" />
+      <param name="upper_limit" value="3000" />
+      <param name="lower_limit" value="-3000" />
+      <param name="windup_limit" value="10" />
+      <param name="max_loop_frequency" value="30.0" />
+      <param name="min_loop_frequency" value="10.0" />
+      <remap from="state" to="/y_state" />
+      <remap from="setpoint" to="/y_setpoint" />
+      
+     </node>
+<!-- 
+    <node name="servo_sim_node" pkg="pid" type="plant_sim" ns="y_speed" output="screen" >
+      <param name="plant_order" value="2" />
+      <param name="reverse_acting" value="true" />
+    </node> -->
+
+<!-- <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure">
+  
+</node> -->
+
+<!-- <node pkg="rqt_robot_monitor" type="rqt_robot_monitor" name="rqt_robot_monitor">
+  
+</node> -->
+
+  </launch>
