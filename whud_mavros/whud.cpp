@@ -27,6 +27,7 @@ class WhudPlugin : public plugin::PluginBase {
     yaw_sub = mav_control_nh.subscribe("/yaw", 1, &WhudPlugin::yaw_cb, this);
     vision_pose_sub = mav_control_nh.subscribe("/vision", 1, &WhudPlugin::vision_pose_cb, this);
     vision_speed_sub = mav_control_nh.subscribe("/vision", 1, &WhudPlugin::vision_speed_cb, this);
+    conversion_sub = mav_control_nh.subscribe("/conversion", 1, &WhudPlugin::conversion_cb, this);
     
     progress_pub = mav_control_nh.advertise<std_msgs::Int32>("/progress", 1);
   }
@@ -49,10 +50,12 @@ class WhudPlugin : public plugin::PluginBase {
   ros::Subscriber yaw_sub;
   ros::Subscriber vision_pose_sub;
   ros::Subscriber vision_speed_sub;
+  ros::Subscriber conversion_sub;
 
   ros::Publisher progress_pub;
 
   tf::TransformListener tf_listener_;
+  int conversion_ = 0;
 
   /* -*- callbacks -*- */
 
@@ -69,7 +72,26 @@ class WhudPlugin : public plugin::PluginBase {
     msg.param5 = 0.5;
     // maxPitch
     msg.param6 = 0.5;
-    msg.param7 = 0;
+    msg.param7 = conversion_;
+
+    UAS_FCU(m_uas)->send_message_ignore_drop(msg);
+  }
+
+  void conversion_cb(const std_msgs::Int32::ConstPtr &conversion)
+  {
+    conversion_ = conversion->data;
+    mavlink::common::msg::COMMAND_LONG msg;
+    // MAV_CMD_USER_1
+    msg.command = 31010;
+    msg.param1 = 0;
+    msg.param2 = 0;
+    msg.param3 = 0;
+    msg.param4 = 0;
+    // maxRoll
+    msg.param5 = 0.5;
+    // maxPitch
+    msg.param6 = 0.5;
+    msg.param7 = conversion_;
 
     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
   }
@@ -173,6 +195,9 @@ class WhudPlugin : public plugin::PluginBase {
     auto progress = boost::make_shared<std_msgs::Int32>();
     progress->data = progress_msg.result;
     progress_pub.publish(progress);
+    // Modify the following conditions to adapt your use
+    if(progress->command != 31010 && progress->data == 0 && conversion_ != 0)
+      conversion_ = 0;
   }
 };
 }  // namespace std_plugins
