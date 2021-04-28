@@ -196,7 +196,7 @@ class WhudPlugin : public plugin::PluginBase {
     progress->data = progress_msg.result;
     progress_pub.publish(progress);
     // Modify the following conditions to adapt your use
-    if(progress->command != 31010 && progress->data == 0 && conversion_ != 0)
+    if(progress_msg.command != 31010 && progress->data == 0 && conversion_ != 0)
       conversion_ = 0;
   }
 };
