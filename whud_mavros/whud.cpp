@@ -56,6 +56,8 @@ class WhudPlugin : public plugin::PluginBase {
 
   tf::TransformListener tf_listener_;
   int conversion_ = 0;
+  int vision_pose_fre_div_ = 0;
+  int vision_speed_fre_div_ = 0;
 
   /* -*- callbacks -*- */
 
@@ -176,8 +178,10 @@ class WhudPlugin : public plugin::PluginBase {
     msg.x = odom->pose.pose.position.x;
     msg.y = odom->pose.pose.position.y;
     msg.z = odom->pose.pose.position.z;
-    
-    UAS_FCU(m_uas)->send_message_ignore_drop(msg);
+    // Divide the frequency of vision pose by 10 
+    if(vision_pose_fre_div_ == 9)
+      UAS_FCU(m_uas)->send_message_ignore_drop(msg);
+    vision_pose_fre_div_ = vision_pose_fre_div_ == 9? 0: vision_pose_fre_div_ + 1;
   }
 
   void vision_speed_cb(const nav_msgs::Odometry::ConstPtr &odom)
@@ -186,8 +190,10 @@ class WhudPlugin : public plugin::PluginBase {
     msg.x = odom->twist.twist.linear.x;
     msg.y = odom->twist.twist.linear.y;
     msg.z = odom->twist.twist.linear.z;
-
-    UAS_FCU(m_uas)->send_message_ignore_drop(msg);
+    // Divide the frequency of vision speed by 4
+    if(vision_speed_fre_div_ == 3)
+      UAS_FCU(m_uas)->send_message_ignore_drop(msg);
+    vision_speed_fre_div_ = vision_speed_fre_div_ == 3? 0: vision_speed_fre_div_ + 1;
   }
 
   void handle_progress(const mavlink::mavlink_message_t *msg, mavlink::common::msg::COMMAND_ACK &progress_msg)
