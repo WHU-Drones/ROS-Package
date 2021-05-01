@@ -11,10 +11,10 @@ namespace mavros{
                 void initialize(UAS &uas_) override {
                     PluginBase::initialize(uas_);
 
-                    navigation_sub = mav_control_nh.subscribe("/mavros/whud/cmd_vel", 1, &WhudNavigationPlugin::navigation_cb, this);
-                    conversion_sub = mav_control_nh.subscribe("/conversion", 1, &WhudNavigationPlugin::conversion_cb, this);
+                    navigation_sub = mav_control_nh.subscribe("/mavros/whud_navigation/cmd_vel", 1, &WhudNavigationPlugin::navigation_cb, this);
+                    conversion_sub = mav_control_nh.subscribe("/mavros/whud_navigation/conversion", 1, &WhudNavigationPlugin::conversion_cb, this);
 
-                    navigation_progress_pub = mav_control_nh.advertise<std_msgs::Int32>("/navigation_progress", 1);
+                    navigation_progress_pub = mav_control_nh.advertise<std_msgs::Int32>("/mavros/whud_navigation/navigation_progress", 1);
                 }
                 Subscriptions get_subscriptions() override
                 {
@@ -23,7 +23,8 @@ namespace mavros{
                     };
                 }
             private:
-                ros::NodeHandle navigation_sub;
+                ros::NodeHandle mav_control_nh;
+                ros::Subscriber navigation_sub;
                 ros::Subscriber conversion_sub;
 
                 ros::Publisher navigation_progress_pub;

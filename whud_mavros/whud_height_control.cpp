@@ -11,9 +11,9 @@ namespace mavros{
                 void initialize(UAS &uas_) override {
                     PluginBase::initialize(uas_);
 
-                    height_control_sub = mav_control_nh.subscribe("/height_control", 1, &WhudHeightControlPlugin::height_control_cb, this);
+                    height_control_sub = mav_control_nh.subscribe("/mavros/whud_height_control/height_control", 1, &WhudHeightControlPlugin::height_control_cb, this);
 
-                    height_control_progress_pub = mav_control_nh.advertise<std_msgs::Int32>("/height_control_progress", 1);
+                    height_control_progress_pub = mav_control_nh.advertise<std_msgs::Int32>("/mavros/whud_height_control/height_control_progress", 1);
                 }
                 Subscriptions get_subscriptions() override
                 {

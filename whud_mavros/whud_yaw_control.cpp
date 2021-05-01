@@ -11,9 +11,9 @@ namespace mavros{
                 void initialize(UAS &uas_) override {
                     PluginBase::initialize(uas_);
 
-                    yaw_control_sub = mav_control_nh.subscribe("/yaw_control", 1, &WhudYawControlPlugin::yaw_control_cb, this);
+                    yaw_control_sub = mav_control_nh.subscribe("/mavros/whud_yaw_control/yaw_control", 1, &WhudYawControlPlugin::yaw_control_cb, this);
 
-                    yaw_control_progress_pub = mav_control_nh.advertise<std_msgs::Int32>("/yaw_control_progress", 1);
+                    yaw_control_progress_pub = mav_control_nh.advertise<std_msgs::Int32>("/mavros/whud_yaw_control/yaw_control_progress", 1);
                 }
                 Subscriptions get_subscriptions() override
                 {

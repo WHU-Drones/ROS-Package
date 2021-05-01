@@ -11,11 +11,11 @@ namespace mavros{
                 void initialize(UAS &uas_) override {
                     PluginBase::initialize(uas_);
 
-                    tf_sub = mav_control_nh.subscribe("/tf", 1, &WhudTfPlugin::tf_cb, this);
+                    tf_sub = mav_control_nh.subscribe("/mavros/whud_tf/tf", 1, &WhudTfPlugin::tf_cb, this);
                 }
                 Subscriptions get_subscriptions() override
                 {
-                    return;
+                    return{};
                 }
             private:
                 ros::NodeHandle mav_control_nh;
