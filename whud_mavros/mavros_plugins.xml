@@ -71,7 +71,27 @@
 	<class name="mount_control" type="mavros::extra_plugins::MountControlPlugin" base_class_type="mavros::plugin::PluginBase">
 		<description>Send Mission command to control a camera or a antenna mount.</description>
 	</class>
+	
 	<class name="whud" type="mavros::std_plugins::WhudPlugin" base_class_type="mavros::plugin::PluginBase">
-		<description>Handle cmd_vel and tf transform messages</description>
+		<description>whud control.</description>
 	</class>
+
+	<!-- <class name="whud_yaw_control" type="mavros::std_plugins::WhudYawControlPlugin" base_class_type="mavros::plugin::PluginBase">
+		<description>Whud control yaw.</description>
+	</class>
+	<class name="whud_vision" type="mavros::std_plugins::WhudVisionPlugin" base_class_type="mavros::plugin::PluginBase">
+		<description>Whud vision pose and vision speed.</description>
+	</class>
+	<class name="whud_tf" type="mavros::std_plugins::WhudTfPlugin" base_class_type="mavros::plugin::PluginBase">
+		<description>Whud tf.</description>
+	</class>
+	<class name="whud_takeoff_land" type="mavros::std_plugins::WhudTakeoffLandPlugin" base_class_type="mavros::plugin::PluginBase">
+		<description>Whud takeoff and land.</description>
+	</class>
+	<class name="whud_navigation" type="mavros::std_plugins::WhudNavigationPlugin" base_class_type="mavros::plugin::PluginBase">
+		<description>Whud navigation.</description>
+	</class>
+	<class name="whud_height_control" type="mavros::std_plugins::WhudHeightControlPlugin" base_class_type="mavros::plugin::PluginBase">
+		<description>Whud control height.</description>
+	</class> -->
 </library>

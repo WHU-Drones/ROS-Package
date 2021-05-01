@@ -90,6 +90,12 @@ add_library(mavros_extras
   src/plugins/wheel_odometry.cpp
   src/plugins/mount_control.cpp
   src/plugins/whud.cpp
+  # src/plugins/whud_yaw_control.cpp
+  # src/plugins/whud_vision.cpp
+  # src/plugins/whud_tf.cpp
+  # src/plugins/whud_takeoff_land.cpp
+  # src/plugins/whud_navigation.cpp
+  # src/plugins/whud_height_control.cpp
 )
 add_dependencies(mavros_extras
   ${catkin_EXPORTED_TARGETS}
