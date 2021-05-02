@@ -12,11 +12,11 @@ namespace mavros{
                 void initialize(UAS &uas_) override {
                     PluginBase::initialize(uas_);
 
-                    takeoff_sub = mav_control_nh.subscribe("/mavros/whud_takeoff_land/takeoff_height", 1, &WhudTakeoffLandPlugin::takeoff_cb, this);
-                    land_sub = mav_control_nh.subscribe("/mavros/whud_takeoff_land/land", 1, &WhudTakeoffLandPlugin::land_cb, this);
+                    takeoff_sub = mav_control_nh.subscribe("takeoff_height", 1, &WhudTakeoffLandPlugin::takeoff_cb, this);
+                    land_sub = mav_control_nh.subscribe("land", 1, &WhudTakeoffLandPlugin::land_cb, this);
 
-                    takeoff_progress_pub = mav_control_nh.advertise<std_msgs::Int32>("/mavros/whud_takeoff_land/takeoff_progress", 1);
-                    land_progress_pub = mav_control_nh.advertise<std_msgs::Int32>("/mavros/whud_takeoff_land/land_progress", 1);
+                    takeoff_progress_pub = mav_control_nh.advertise<std_msgs::Int32>("takeoff_progress", 1);
+                    land_progress_pub = mav_control_nh.advertise<std_msgs::Int32>("land_progress", 1);
                 }
                 Subscriptions get_subscriptions() override
                 {

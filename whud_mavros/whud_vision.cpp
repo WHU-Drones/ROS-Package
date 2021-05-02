@@ -10,8 +10,8 @@ namespace mavros{
                 void initialize(UAS &uas_) override {
                     PluginBase::initialize(uas_);
 
-                    vision_pose_sub = mav_control_nh.subscribe("/mavros/whud_vision/vision", 1, &WhudVisionPlugin::vision_pose_cb, this);
-                    vision_speed_sub = mav_control_nh.subscribe("/mavros/whud_vision/vision", 1, &WhudVisionPlugin::vision_speed_cb, this);
+                    vision_pose_sub = mav_control_nh.subscribe("vision", 1, &WhudVisionPlugin::vision_pose_cb, this);
+                    vision_speed_sub = mav_control_nh.subscribe("vision", 1, &WhudVisionPlugin::vision_speed_cb, this);
 
                 }
                 Subscriptions get_subscriptions() override
