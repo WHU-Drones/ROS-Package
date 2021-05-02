@@ -32,9 +32,9 @@ namespace mavros{
                     mavlink::common::msg::COMMAND_LONG msg;
                     // MAV_CMD_CONDITION_CHANGE_ALT
                     msg.command = 113;
-                    // set descent/ascend rate
+                    // set descent/ascend rate, default unit m/s
                     msg.param1 = height_msg->data[0];
-                    // set target altitude
+                    // set target altitude, default unit m
                     msg.param7 = height_msg->data[1];
 
                     UAS_FCU(m_uas)->send_message_ignore_drop(msg);

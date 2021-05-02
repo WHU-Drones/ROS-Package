@@ -7,7 +7,7 @@ namespace mavros{
     namespace std_plugins{
         class WhudNavigationPlugin : public plugin::PluginBase{
             public:
-                WhudNavigationPlugin() : PluginBase(), mav_control_nh("~whud_yaw_control"){}
+                WhudNavigationPlugin() : PluginBase(), mav_control_nh("~whud_navigation"){}
                 void initialize(UAS &uas_) override {
                     PluginBase::initialize(uas_);
 

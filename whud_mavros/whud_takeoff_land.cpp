@@ -37,9 +37,9 @@ namespace mavros{
                     mavlink::common::msg::COMMAND_LONG msg;
                     // MAV_CMD_NAV_TAKEOFF_LOCAL
                     msg.command = 24;
-                    // set z axis speed
+                    // set z axis speed, default unit m/s
                     msg.param3 = takeoff_msg->data[0];
-                    // set height
+                    // set height, default unit m
                     msg.param7 = takeoff_msg->data[1];
 
                     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
@@ -50,7 +50,7 @@ namespace mavros{
                     mavlink::common::msg::COMMAND_LONG msg;
                     // MAV_CMD_NAV_LAND_LOCAL
                     msg.command = 23;
-                    // set z axis speed
+                    // set z axis speed, default unit cm/s
                     msg.param3 = land_msg->data;
                     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
                 }
