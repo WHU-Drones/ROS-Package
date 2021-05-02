@@ -1,13 +1,13 @@
 <launch>
     <!-- 运行move_base节点 -->
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
-        <rosparam file="$(find whud_navigation)/config/whud_robot_yaw_control/costmap_common_params.yaml" command="load" ns="global_costmap" />
-        <rosparam file="$(find whud_navigation)/config/whud_robot_yaw_control/costmap_common_params.yaml" command="load" ns="local_costmap" />
-        <rosparam file="$(find whud_navigation)/config/whud_robot_yaw_control/local_costmap_params.yaml" command="load" />
-        <rosparam file="$(find whud_navigation)/config/whud_robot_yaw_control/global_costmap_params.yaml" command="load" />
-        <rosparam file="$(find whud_navigation)/config/whud_robot_yaw_control/dwa_local_planner_params.yaml" command="load" />
-        <rosparam file="$(find whud_navigation)/config/whud_robot_yaw_control/global_planner_params.yaml" command="load" />
-        <rosparam file="$(find whud_navigation)/config/whud_robot_yaw_control/move_base_params.yaml" command="load" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot/dwa_local_planner_params.yaml" command="load" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot/global_planner_params.yaml" command="load" />
+        <rosparam file="$(find whud_navigation)/config/whud_robot/move_base_params.yaml" command="load" />
 
         <remap from="/cmd_vel" to="/mavros/whud/cmd_vel" />
     </node>
