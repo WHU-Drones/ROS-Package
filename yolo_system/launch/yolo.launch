@@ -1,0 +1,4 @@
+<launch>
+	<node pkg = "yolo_system" type = "yolo" name = "yolo" output = "screen">
+	</node>
+</launch>

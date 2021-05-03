@@ -1,0 +1,37 @@
+# This is a yaml config for task
+# To generate your task,copy and rename this file.change params what you want.
+
+# all tasks are divided into two categories: movement and the others.
+
+# TaskSet:
+# movement_task: 0-FREE 1-TAKEOFF 2-LAND 3-HEIGHT_CONTROL 4-WAYPOINT 5-OBJECT_TRACK
+
+# thread on-off.
+movement_Task_on_off: true
+attach_Task_on_off: false
+
+task_timeout_seconds: 20
+
+# choose task in movement taskset and fill in params.
+movement_task: 3
+# movement task param list
+takeoff_height_data: 0.0
+height_control_data: 0.5
+land_data: true
+track_object_name: ''
+target_x: 0.0
+target_y: 0.0
+
+
+# attach task on-off.
+drop_cargo: false
+# attach task param list
+cargo_name: ''
+
+
+
+
+
+
+
+
