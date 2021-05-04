@@ -50,7 +50,7 @@ namespace mavros{
                     mavlink::common::msg::COMMAND_LONG msg;
                     // MAV_CMD_NAV_LAND_LOCAL
                     msg.command = 23;
-                    // set z axis speed, default unit cm/s
+                    // set z axis speed, default unit m/s
                     msg.param3 = land_msg->data;
                     UAS_FCU(m_uas)->send_message_ignore_drop(msg);
                 }

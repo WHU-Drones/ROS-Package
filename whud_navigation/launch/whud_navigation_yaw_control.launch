@@ -9,7 +9,7 @@
         <rosparam file="$(find whud_navigation)/config/whud_robot_yaw_control/global_planner_params.yaml" command="load" />
         <rosparam file="$(find whud_navigation)/config/whud_robot_yaw_control/move_base_params.yaml" command="load" />
 
-        <remap from="/cmd_vel" to="/mavros/whud/cmd_vel" />
+        <remap from="/cmd_vel" to="/move_base/cmd_vel" />
     </node>
 
     <!-- 运行rviz -->
