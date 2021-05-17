@@ -1,0 +1,11 @@
+movement_plugin_list: 
+- whud_stateOS::MovementFree
+- whud_stateOS::Takeoff
+- whud_stateOS::Land
+- whud_stateOS::HeightControl
+- whud_stateOS::MoveBaseClient
+- whud_stateOS::YoloSystem
+
+attach_plugin_list: 
+- whud_stateOS::AttachFree
+- whud_stateOS::DropCargo

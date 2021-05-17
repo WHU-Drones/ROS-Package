@@ -1,0 +1,30 @@
+# This is a yaml config for task
+# To generate your task,copy and rename this file.change params what you want.
+
+# Query plugin_list.txt for the plugin name.
+
+task_timeout_seconds: 20
+
+# choose plugin in movement plugins.
+movement_plugin: "whud_stateOS::MoveBaseClient"
+# movement plugins param list
+takeoff_height_data: 1.0
+height_control_data: 0.5
+land_data: true
+track_object_name: ''
+target_x: 2.0
+target_y: 1.0
+
+
+# choose plugin in attach plugins.
+attach_plugin: "whud_stateOS::DropCargo"
+# attach plugin param list
+cargo_name: A
+
+
+
+
+
+
+
+

@@ -1,0 +1,7 @@
+<launch>
+	<node pkg = "whud_stateos" type = "OSMain" name = "StateOS" output="screen">
+		<rosparam file="$(find whud_stateos)/config/plugin_list.yaml" command="load" /> 
+		<param name="file_path" value="$(find whud_stateos)/config/Task"/>
+		<param name="task_count" value="4"/>
+	</node>
+</launch>
