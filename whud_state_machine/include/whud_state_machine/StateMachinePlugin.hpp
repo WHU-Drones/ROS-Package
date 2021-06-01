@@ -9,7 +9,7 @@ namespace whud_state_machine {
 class PluginBase {
  public:
   PluginBase() {}
-  PluginBase(const PluginBase &) = delete;
+  PluginBase(const PluginBase&) = delete;
   ~PluginBase() {}
 
   inline TaskStatus GetTaskStatus() const { return task_status_; }
@@ -17,7 +17,7 @@ class PluginBase {
   inline void EnableControl() { control_flag_ = true; }
   inline void DisableControl() { control_flag_ = false; }
 
-  virtual void OnInit(MavRosPublisher &mavros_pub) {
+  virtual void OnInit(MavRosPublisher& mavros_pub) {
     mavros_pub_ = &mavros_pub;
   }
 
@@ -30,7 +30,7 @@ class PluginBase {
   virtual void StopTask() = 0;
 
  protected:
-  MavRosPublisher *mavros_pub_ = nullptr;
+  MavRosPublisher* mavros_pub_ = nullptr;
   TaskStatus task_status_;
   bool interrupt_signal_;
   bool control_flag_;
