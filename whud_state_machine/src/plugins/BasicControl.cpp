@@ -54,7 +54,7 @@ class WhudBasicControl : public PluginBase {
 
   virtual void TaskSpin() override {
     sm_nh_.getParam("/mavros/whud_basic/ack_cmd_index", mavros_command_);
-    sm_nh_.getParam("/mavros/whud_basic/ack_result_", mavros_result_);
+    sm_nh_.getParam("/mavros/whud_basic/ack_result", mavros_result_);
 
     switch (command_) {
       case Command::TAKEOFF:
