@@ -1,0 +1,9 @@
+[I 15:24:30.702 NotebookApp] Serving notebooks from local directory: /home/nvidia/Code/ROS-Package/whud_mavros
+[I 15:24:30.703 NotebookApp] Jupyter Notebook 6.3.0 is running at:
+[I 15:24:30.703 NotebookApp] http://nx-jp440:8888/
+[I 15:24:30.703 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[W 15:24:30.724 NotebookApp] No web browser found: could not locate runnable browser.
+[I 15:24:30.807 NotebookApp] 302 GET / (192.168.0.226) 1.840000ms
+[C 15:25:00.127 NotebookApp] received signal 15, stopping
+[I 15:25:00.131 NotebookApp] Shutting down 0 kernels
+[I 15:25:00.132 NotebookApp] Shutting down 0 terminals
