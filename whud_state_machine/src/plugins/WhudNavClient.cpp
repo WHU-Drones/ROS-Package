@@ -3,7 +3,7 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <ros/ros.h>
 #include <tf/transform_listener.h>
-#include <tf/tf.h>
+
 #include "StateMachinePlugin.hpp"
 
 using namespace std;
@@ -11,20 +11,10 @@ using namespace std;
 namespace whud_state_machine {
 
 class WhudNavClient : public PluginBase {
- public:
+public:
   WhudNavClient()
-      : PluginBase(), nh_("~whud_nav_client"), nav_client_("nav_client") {}
+      : PluginBase(), nh_("~whud_nav_client"), nav_client_("move_base") {}
   ~WhudNavClient() {}
-
- private:
-  ros::NodeHandle nh_;
-  actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> nav_client_;
-  ros::Subscriber nav_vel_sub_;
-
-  tf::TransformListener tf_listener_;
-  string map_frame_id_, body_frame_id_;
-
-  geometry_msgs::Pose last_set_pose_;
 
   virtual void OnInit(MavRosPublisher &mavros_pub) override {
     PluginBase::OnInit(mavros_pub);
@@ -34,6 +24,10 @@ class WhudNavClient : public PluginBase {
 
     nav_vel_sub_ =
         nh_.subscribe("cmd_vel", 1, &WhudNavClient::nav_vel_cb, this);
+
+    nav_client_.waitForServer();
+    tf_listener_.waitForTransform("/" + map_frame_id_, "/" + body_frame_id_,
+                                   ros::Time(0), ros::Duration(0, 0));
   }
 
   void nav_vel_cb(const geometry_msgs::Twist::ConstPtr &req) {
@@ -44,18 +38,19 @@ class WhudNavClient : public PluginBase {
   virtual bool SetTask(ros::V_string param) override {
     PluginBase::SetTask(param);
     geometry_msgs::Pose set_pose;
-    set_pose.position.x=(atof(param[0].c_str()));
-    set_pose.position.y=(atof(param[1].c_str()));
-    set_pose.position.z=0;
+    set_pose.position.x = (atof(param[0].c_str()));
+    set_pose.position.y = (atof(param[1].c_str()));
+    set_pose.position.z = 0;
     tf::Quaternion q;
-    q.setRPY(0,0,0); 
-    set_pose.orientation.x=q.getX();
-    set_pose.orientation.y=q.getY();
-    set_pose.orientation.z=q.getZ();
-    set_pose.orientation.w=q.getW();
+    q.setRPY(0, 0, 0);
+    set_pose.orientation.x = q.getX();
+    set_pose.orientation.y = q.getY();
+    set_pose.orientation.z = q.getZ();
+    set_pose.orientation.w = q.getW();
+
     // goal serialization
-    while (!TransformDetector())
-      ROS_WARN("Can not find trasform from body frame to map");
+    // while (!TransformDetector())
+    //   ROS_WARN("Can not find trasform from body frame to map");
 
     if (!ConsensusDetector(set_pose)) {
       ROS_WARN("You set the pose which is the same as last set");
@@ -73,7 +68,19 @@ class WhudNavClient : public PluginBase {
 
   virtual void TaskSpin() override {}
 
-  virtual void StopTask() override { nav_client_.cancelGoal(); }
+  virtual void StopTask() override {
+    nav_client_.cancelGoal();
+  }
+
+private:
+  ros::NodeHandle nh_;
+  actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> nav_client_;
+  ros::Subscriber nav_vel_sub_;
+
+  tf::TransformListener tf_listener_;
+  string map_frame_id_, body_frame_id_;
+
+  geometry_msgs::Pose last_set_pose_;
 
   void ActiveCb() {}
 

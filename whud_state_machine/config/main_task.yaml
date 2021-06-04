@@ -1,21 +1,68 @@
-# 
+#
 # main task list
-# 
+#
 # if you want to add main task, delete "[]" and add task like this:
 # main_task_list:
 # - task_A
 # - task_B
 #   ...
-main_task_list: []
+main_task_list:
+  - task_A
+  - task_B
+  - task_C
+  - task_F
+  - task_E
 
-# 
+#
 # main task description
-# 
+#
 # task_A:
-#   plugin_name: 
+#   plugin_name:
 #   delay_timeout: 10
 #   param:
 #   - param_A
 #   - param_B
 #   task_name: "task_A"
-#   attach_name: 
+#   attach_name:
+
+task_A:
+  plugin_name: "whud_basic_control"
+  delay_timeout: 3
+  param: [takeoff, "0", "1.0"]
+  task_name: "task_A"
+  attach_name: "none"
+
+task_B:
+  plugin_name: "whud_nav_client"
+  delay_timeout: 10
+  param: ["0.5", "-0.5"]
+  task_name: "task_B"
+  attach_name: "none"
+
+task_C:
+  plugin_name: "whud_basic_control"
+  delay_timeout: 3
+  param: [land, "0"]
+  task_name: "task_C"
+  attach_name: "none"
+
+task_D:
+  plugin_name: "whud_basic_control"
+  delay_timeout: 10
+  param: [yaw_control, "0.7", "1"]
+  task_name: "task_D"
+  attach_name: "none"
+
+task_E:
+  plugin_name: "whud_basic_control"
+  delay_timeout: 10
+  param: [height_control, "0", "0.3"]
+  task_name: "task_E"
+  attach_name: "none"
+
+task_F:
+  plugin_name: "whud_nav_client"
+  delay_timeout: 10
+  param: ["0.6", "-0.6"]
+  task_name: "task_F"
+  attach_name: "none"

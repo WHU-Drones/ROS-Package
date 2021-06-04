@@ -27,6 +27,10 @@ StateMachine::StateMachine()
   mavros_pub_.cmd_vel_pub = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 5);
   mavros_pub_.conversion_pub = nh_.advertise<std_msgs::Bool>("conversion", 5);
 
+  // init service
+  get_task_list_srv_ =
+      nh_.advertiseService("get_task_list", &StateMachine::GetTaskList, this);
+
   // load plugin
   for (auto &plugin_name : plugin_loader_.getDeclaredClasses())
     LoadPlugin(plugin_name);
@@ -72,7 +76,7 @@ void StateMachine::SetTask(const ros::TimerEvent &event) {
   // set main task
   current_main_task_plugin_ = plugin_map_[main_task_iterator_->plugin_name];
   current_main_task_plugin_->SetTask(main_task_iterator_->param);
-  ROS_INFO_STREAM("Current task is " + main_task_iterator_->task_name);
+  ROS_INFO_STREAM("Current task is " + main_task_iterator_->task_name + ".");
 
   // enable main plugin control
   current_main_task_plugin_->EnableControl();
@@ -88,7 +92,7 @@ void StateMachine::SetTask(const ros::TimerEvent &event) {
     SetInterruptTask(main_task_iterator_->attach_name);
 
   // record main task begin time
-  main_task_begin_time_ = event.current_expected;
+  main_task_begin_time_ = event.current_expected.now().toSec();
 
   // set loop status
   state_machine_status_ = StateMachineStatus::MAIN_TASK;
@@ -102,10 +106,10 @@ void StateMachine::TaskSpin(const ros::TimerEvent &event) {
     if (interrupt_flag) {
       // check last interrupt flag
       if (last_interrupt_flag_ != interrupt_flag) {
-        ROS_INFO_STREAM("Current task is " + main_task_iterator_->attach_name);
+        ROS_INFO_STREAM("Current task is " + main_task_iterator_->attach_name + ".");
 
         // record begin time
-        interrupt_task_begin_time_ = event.current_expected;
+        interrupt_task_begin_time_ = event.current_expected.now().toSec();
 
         // set loop status
         state_machine_status_ = StateMachineStatus::INTERRUPT_TASK;
@@ -119,8 +123,7 @@ void StateMachine::TaskSpin(const ros::TimerEvent &event) {
       current_interrupt_task_plugin_->TaskSpin();
 
       // check interrupt task timeout
-      if (event.current_expected.now().toSec() -
-              interrupt_task_begin_time_.now().toSec() >
+      if (event.current_expected.now().toSec() - interrupt_task_begin_time_ >
           current_interrupt_task_.delay_timeout)
         state_machine_status_ = StateMachineStatus::INTERRUPT_TASK_TIMEOUT;
 
@@ -129,8 +132,7 @@ void StateMachine::TaskSpin(const ros::TimerEvent &event) {
       current_main_task_plugin_->TaskSpin();
 
       // check main task timeout
-      if (event.current_expected.now().toSec() -
-              main_task_begin_time_.now().toSec() >
+      if (event.current_expected.now().toSec() - main_task_begin_time_ >
           main_task_iterator_->delay_timeout)
         state_machine_status_ = StateMachineStatus::MAIN_TASK_TIMEOUT;
     }
@@ -143,8 +145,7 @@ void StateMachine::TaskSpin(const ros::TimerEvent &event) {
     current_main_task_plugin_->TaskSpin();
 
     // check main task timeout
-    if (event.current_expected.now().toSec() -
-            main_task_begin_time_.now().toSec() >
+    if (event.current_expected.now().toSec() - main_task_begin_time_ >
         main_task_iterator_->delay_timeout)
       state_machine_status_ = StateMachineStatus::MAIN_TASK_TIMEOUT;
 
@@ -155,75 +156,50 @@ void StateMachine::TaskSpin(const ros::TimerEvent &event) {
 
 void StateMachine::CheckLoopStatus() {
   switch (state_machine_status_) {
-    case StateMachineStatus::MAIN_TASK:
-      if (current_main_task_plugin_->GetTaskStatus() == TaskStatus::DONE) {
-        ROS_INFO_STREAM("Task " + main_task_iterator_->task_name + " is done");
-
-        // disable plugin control
-        current_main_task_plugin_->DisableControl();
-        current_interrupt_task_plugin_->DisableControl();
-
-        // check main task vector and set loop status
-        if (main_task_iterator_ == main_task_vector_.end())
-          state_machine_status_ = StateMachineStatus::END;
-        else {
-          state_machine_status_ = StateMachineStatus::FREE;
-          ++main_task_iterator_;
-        }
-      }
-      break;
-
-    case StateMachineStatus::MAIN_TASK_TIMEOUT:
-      ROS_INFO_STREAM("Task " + main_task_iterator_->task_name + " is timeout");
-
-      // stop current task
-      current_main_task_plugin_->StopTask();
+  case StateMachineStatus::MAIN_TASK:
+    if (current_main_task_plugin_->GetTaskStatus() == TaskStatus::DONE) {
+      ROS_INFO_STREAM("Task " + main_task_iterator_->task_name + " is done.");
 
       // disable plugin control
       current_main_task_plugin_->DisableControl();
-      current_interrupt_task_plugin_->DisableControl();
+      if (current_interrupt_task_plugin_ != nullptr)
+        current_interrupt_task_plugin_->DisableControl();
 
       // check main task vector and set loop status
-      if (main_task_iterator_ == main_task_vector_.end())
+      if (main_task_iterator_ == main_task_vector_.end() - 1) {
         state_machine_status_ = StateMachineStatus::END;
-      else {
+        ROS_INFO("State machine end.");
+      } else {
         state_machine_status_ = StateMachineStatus::FREE;
         ++main_task_iterator_;
       }
-      break;
+    }
+    break;
 
-    case StateMachineStatus::INTERRUPT_TASK:
-      if (current_interrupt_task_plugin_->GetTaskStatus() == TaskStatus::DONE) {
-        ROS_INFO_STREAM("Task " + main_task_iterator_->attach_name +
-                        " is done");
+  case StateMachineStatus::MAIN_TASK_TIMEOUT:
+    ROS_WARN_STREAM("Task " + main_task_iterator_->task_name + " is timeout!");
 
-        // disable plugin control
-        current_main_task_plugin_->DisableControl();
-        current_interrupt_task_plugin_->DisableControl();
+    // stop current task
+    current_main_task_plugin_->StopTask();
 
-        // set loop status
-        state_machine_status_ = StateMachineStatus::FREE;
+    // disable plugin control
+    current_main_task_plugin_->DisableControl();
+    if (current_interrupt_task_plugin_ != nullptr)
+      current_interrupt_task_plugin_->DisableControl();
 
-        // reset last interrupt flag
-        last_interrupt_flag_ = false;
+    // check main task vector and set loop status
+    if (main_task_iterator_ == main_task_vector_.end() - 1) {
+      state_machine_status_ = StateMachineStatus::END;
+      ROS_INFO("State machine end");
+    } else {
+      state_machine_status_ = StateMachineStatus::FREE;
+      ++main_task_iterator_;
+    }
+    break;
 
-        // compare return name and main task name
-        for (auto iter = main_task_vector_.begin();
-             iter < main_task_vector_.end(); iter++) {
-          if (current_interrupt_task_.return_name == iter->task_name) {
-            main_task_iterator_ = iter;
-            break;
-          }
-        }
-      }
-      break;
-
-    case StateMachineStatus::INTERRUPT_TASK_TIMEOUT:
-      ROS_INFO_STREAM("Task " + main_task_iterator_->attach_name +
-                      " is timeout");
-
-      // stop current task
-      current_interrupt_task_plugin_->StopTask();
+  case StateMachineStatus::INTERRUPT_TASK:
+    if (current_interrupt_task_plugin_->GetTaskStatus() == TaskStatus::DONE) {
+      ROS_INFO_STREAM("Task " + main_task_iterator_->attach_name + " is done.");
 
       // disable plugin control
       current_main_task_plugin_->DisableControl();
@@ -235,12 +211,39 @@ void StateMachine::CheckLoopStatus() {
       // reset last interrupt flag
       last_interrupt_flag_ = false;
 
-      // set disable interrupt flag
-      disable_interrupt_flag_ = true;
-      break;
+      // compare return name and main task name
+      for (auto iter = main_task_vector_.begin();
+           iter < main_task_vector_.end(); iter++) {
+        if (current_interrupt_task_.return_name == iter->task_name) {
+          main_task_iterator_ = iter;
+          break;
+        }
+      }
+    }
+    break;
 
-    default:
-      break;
+  case StateMachineStatus::INTERRUPT_TASK_TIMEOUT:
+    ROS_WARN_STREAM("Task " + main_task_iterator_->attach_name + " is timeout!");
+
+    // stop current task
+    current_interrupt_task_plugin_->StopTask();
+
+    // disable plugin control
+    current_main_task_plugin_->DisableControl();
+    current_interrupt_task_plugin_->DisableControl();
+
+    // set loop status
+    state_machine_status_ = StateMachineStatus::FREE;
+
+    // reset last interrupt flag
+    last_interrupt_flag_ = false;
+
+    // set disable interrupt flag
+    disable_interrupt_flag_ = true;
+    break;
+
+  default:
+    break;
   }
 }
 
@@ -279,6 +282,45 @@ void StateMachine::SetInterruptTask(std::string &task_name) {
     current_interrupt_task_plugin_->DisableControl();
   } else
     current_interrupt_task_plugin_ = nullptr;
+}
+
+bool StateMachine::GetTaskList(whud_state_machine::GetTaskList::Request &req,
+                               whud_state_machine::GetTaskList::Response &res) {
+  if (req.Call) {
+    res.MainTaskList.clear();
+    res.InterruptTaskList.clear();
+    for (auto &task : main_task_vector_) {
+      res.MainTaskList.push_back(WrapMainTask(task));
+      if (task.attach_name != "none")
+        res.InterruptTaskList.push_back(WrapInterruptTask(task.attach_name));
+    }
+  }
+  return true;
+}
+
+WhudMainTask StateMachine::WrapMainTask(const MainTask task) {
+  WhudMainTask wrap_task;
+  wrap_task.plugin_name = task.plugin_name;
+  wrap_task.delay_timeout = task.delay_timeout;
+  wrap_task.param = task.param;
+  wrap_task.task_name = task.task_name;
+  wrap_task.attach_name = task.attach_name;
+  return wrap_task;
+}
+
+WhudInterruptTask StateMachine::WrapInterruptTask(const string task_name) {
+  WhudInterruptTask wrap_task;
+  InterruptTask task;
+  nh_.getParam(task_name + "/plugin_name", task.plugin_name);
+  nh_.getParam(task_name + "/delay_timeout", task.delay_timeout);
+  nh_.getParam(task_name + "/param", task.param);
+  nh_.getParam(task_name + "/return_name", task.return_name);
+
+  wrap_task.plugin_name = task.plugin_name;
+  wrap_task.delay_timeout = task.delay_timeout;
+  wrap_task.param = task.param;
+  wrap_task.return_name = task.return_name;
+  return wrap_task;
 }
 
 }  // namespace whud_state_machine

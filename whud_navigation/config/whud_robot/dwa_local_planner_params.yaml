@@ -15,7 +15,7 @@ DWAPlannerROS:
     min_rot_vel: 0.0 # absolute value 
 
     yaw_goal_tolerance: 0.2
-    xy_goal_tolerance: 0.05
+    xy_goal_tolerance: 0.1
     latch_xy_goal_tolerance: false
 
     sim_time: 2.0

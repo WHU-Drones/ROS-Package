@@ -2,6 +2,14 @@
 <launch>
 
   <node pkg="whud_state_machine" type="whud_state_machine_node" name="whud_state_machine_node" output="screen">
+
+    <remap from="/whud_state_machine_node/cmd_vel" to="/mavros/whud_nav/cmd_vel" />
+    <remap from="/whud_state_machine_node/conversion" to="/mavros/whud_nav/conversion" />
+    <remap from="/whud_state_machine_node/height" to="/mavros/whud_basic/height" />
+    <remap from="/whud_state_machine_node/land" to="/mavros/whud_basic/land" />
+    <remap from="/whud_state_machine_node/takeoff_height" to="/mavros/whud_basic/takeoff_height" />
+    <remap from="/whud_state_machine_node/yaw" to="/mavros/whud_basic/yaw" />
+
     <param name="loop_frequency" value="10"/>
     <param name="state_machine_threads" value="4"/>
 
